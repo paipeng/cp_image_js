@@ -14,7 +14,7 @@ CpLogMat.prototype.print = function (mat) {
     //log.info('fyi', 'I have a kitty cat: %j', mat.data.length)
     for (var i = 0; i < mat.height; i++) {
         for (var j = 0; j < mat.width; j++) {
-            process.stdout.write(mat.data[i * mat.width + j] / 255 + " ");
+            process.stdout.write(mat.data[i * mat.width + j] + " ");
             //process.stderr.write("hello: ");
         }
         process.stderr.write("\n")

@@ -6,10 +6,10 @@
  * 
  */
 
-//var writer = require('./cp_bmp_write');
+var writer = require('./cp_bmp_write');
 var reader = require('./cp_bmp_read');
 
 module.exports = {
-    //writer: writer,
+    writer: writer,
     reader: reader
 };

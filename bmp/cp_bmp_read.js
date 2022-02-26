@@ -8,6 +8,7 @@ function BmpReader(imageFile) {
     if (this.flag != "BM") throw new Error("Invalid BMP File");
     this.parseHeader();
     this.parseRGBA();
+    this.channel = 1;
 }
 
 BmpReader.prototype.parseHeader = function () {
