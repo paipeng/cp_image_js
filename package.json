@@ -1,0 +1,31 @@
+{
+  "name": "cp_image_js",
+  "version": "1.0.0",
+  "description": "A Pure Javascript Version for image processing",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/paipeng/cp_image_js.git"
+  },
+  "keywords": [
+    "Image",
+    "Processing"
+  ],
+  "author": "Pai Peng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paipeng/cp_image_js/issues"
+  },
+  "homepage": "https://github.com/paipeng/cp_image_js#readme",
+  "dependencies": {
+    "bmp-js": "^0.1.0",
+    "fs": "0.0.1-security",
+    "npmlog": "^6.0.1"
+  }
+}
