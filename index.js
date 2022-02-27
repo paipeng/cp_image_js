@@ -5,17 +5,21 @@ var bmp = require("./bmp/cp_bmp");
 var imageProcess = require("./imageprocess/cp_imageprocess");
 
 //var bmpBuffer = fs.readFileSync();
-var mat = bmp.reader('decoded_image.bmp');
 
-console.log(mat);
-
-
-log.mat.print(mat);
+var imageFile = './test/decoded_image.bmp';
+imageFile = './test/37c54c80-b788-4ede-bf27-8f7b26719349-d.bmp';
+var mat = bmp.reader(imageFile);
 
 
-var resizeMat = imageProcess.resize(mat).resize(42, 42);
+//console.log(mat);
+
+
+//log.mat.print(mat);
+
+
+var resizeMat = imageProcess.resize(mat).resize(parseInt(mat.width * 1.4), parseInt(mat.height * 1.4));
 
 
 //log.mat.print(resizeMat);
 
-bmp.writer('out.bmp', resizeMat);
+bmp.writer('./test/out.bmp', resizeMat);
