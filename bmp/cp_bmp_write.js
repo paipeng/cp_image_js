@@ -13,7 +13,7 @@ BmpWriter.prototype.setHeader = function () {
     this.extraBytes = this.mat.width % 4;
     // 
     // row_size = 4 * ((mat -> width * bitsPerPixel + 31) / 32);
-    this.rowSize = parseInt(4 * ((this.mat.width * 8 + 31) / 32));
+    this.rowSize = 4 * parseInt(((this.mat.width * 8 + 31) / 32));
     console.log(this.rowSize);
     this.rgbSize = this.mat.height * this.rowSize;//(this.mat.width + this.extraBytes);
     this.headerInfoSize = 40;
