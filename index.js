@@ -28,7 +28,7 @@ bmp.writer('./test/out_crop.bmp', cropMat);
 
 // 3. blur filter
 
-var blurMat = imageProcess.filter(mat).blur();
+var blurMat = imageProcess.filter(mat).blur(9);
 bmp.writer('./test/out_blur.bmp', blurMat);
 
 //log.mat.print(resizeMat);
