@@ -8,6 +8,8 @@ var imageProcess = require("./imageprocess/cp_imageprocess");
 
 var imageFile = './test/decoded_image.bmp';
 imageFile = './test/37c54c80-b788-4ede-bf27-8f7b26719349-d.bmp';
+imageFile = './test/6fa4ac3e-4ada-46e1-9cdb-34d1af480b09.bmp';
+
 var mat = bmp.reader(imageFile);
 
 
@@ -16,10 +18,11 @@ var mat = bmp.reader(imageFile);
 
 //log.mat.print(mat);
 
-
-var resizeMat = imageProcess.resize(mat).resize(parseInt(mat.width * 1.4), parseInt(mat.height * 1.4));
-
+// 1. resize
+var resizeMat = imageProcess.resize(mat).resize(parseInt(mat.width * 2.4), parseInt(mat.height * 2.4));
+bmp.writer('./test/out_resize.bmp', resizeMat);
+// 2. crop
+var cropMat = imageProcess.crop(mat).crop(30, 30, 160, 160);
+bmp.writer('./test/out_crop.bmp', cropMat);
 
 //log.mat.print(resizeMat);
-
-bmp.writer('./test/out.bmp', resizeMat);

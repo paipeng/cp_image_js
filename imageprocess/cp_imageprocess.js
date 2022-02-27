@@ -1,7 +1,9 @@
 
 
-var resize = require('./cp_resize.js');
+var resize = require('./cp_resize');
+var crop = require('./cp_crop');
 
 module.exports = {
-    resize: resize
+    resize: resize,
+    crop: crop
 };
