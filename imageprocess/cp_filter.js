@@ -5,7 +5,38 @@ function CPFilter(mat) {
     this.mat = mat;
 }
 
+
+
 CPFilter.prototype.blur = function (filter_size) {
+    var filter_size = (filter_size % 2 == 1) ? filter_size : (filter_size + 1);
+    var blur_filter = new Float32Array(filter_size * filter_size);
+    for (var i = 0; i < filter_size * filter_size; i++) {
+        blur_filter[i] = 1 / (filter_size * filter_size);
+    }
+
+    var temp = new Uint8Array((this.mat.width) * (this.mat.height));
+
+    for (var i = 0; i < this.mat.height - filter_size; i++) {
+        for (var j = 0; j < this.mat.width - filter_size; j++) {
+            var pixel = 0;
+            for (var k = 0; k < filter_size; k++) {
+                for (var l = 0; l < filter_size; l++) {
+                    pixel += this.mat.data[(i + k) * this.mat.width + (j + l)] * (blur_filter[k * filter_size + l]);
+                }
+            }
+            temp[i * this.mat.width + j] = parseInt(pixel);
+        }
+    }
+
+    return {
+        width: this.mat.width,
+        height: this.mat.height,
+        channel: 1,
+        data: temp
+    };
+};
+
+CPFilter.prototype.gaussBlur = function (filter_size) {
     var filter_size = (filter_size % 2 == 1) ? filter_size : (filter_size + 1);
     var gaussian_blur = new Float32Array(filter_size * filter_size);
 
@@ -47,7 +78,7 @@ CPFilter.prototype.blur = function (filter_size) {
     }
     //log.array.print(gaussian_blur, filter_size, filter_size);
 
-    var temp = new Uint8Array(this.mat.width * this.mat.height);
+    var temp = new Uint8Array((this.mat.width) * (this.mat.height));
 
     for (var i = 0; i < this.mat.height - filter_size; i++) {
         for (var j = 0; j < this.mat.width - filter_size; j++) {
