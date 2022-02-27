@@ -30,7 +30,7 @@ CPFilter.prototype.blur = function (filter_size) {
             sum += gaussian_blur[(filter_size - i - 1) * filter_size + (filter_size - j - 1)];
         }
     }
-    log.array.print(gaussian_blur, filter_size, filter_size);
+    //log.array.print(gaussian_blur, filter_size, filter_size);
 
     var sum = 0;
     for (var i = 0; i < filter_size; i++) {
@@ -38,14 +38,14 @@ CPFilter.prototype.blur = function (filter_size) {
             sum += gaussian_blur[i * filter_size + j];
         }
     }
-    console.log('sum: ' + sum);
+    //console.log('sum: ' + sum);
 
     for (var i = 0; i < filter_size; i++) {
         for (var j = 0; j < filter_size; j++) {
             gaussian_blur[i * filter_size + j] /= sum;
         }
     }
-    log.array.print(gaussian_blur, filter_size, filter_size);
+    //log.array.print(gaussian_blur, filter_size, filter_size);
 
     var temp = new Uint8Array(this.mat.width * this.mat.height);
 
