@@ -37,7 +37,18 @@ CpLogArray.prototype.print = function (data, width, height) {
 }
 
 
+
+function CpLogText() {
+
+}
+
+CpLogText.prototype.print = function (data) {
+    process.stdout.write(data);
+}
+
+
 module.exports = {
     mat: new CpLogMat(),
-    array: new CpLogArray()
+    array: new CpLogArray(),
+    text: new CpLogText()
 };
