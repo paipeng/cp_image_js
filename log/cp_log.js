@@ -22,7 +22,22 @@ CpLogMat.prototype.print = function (mat) {
 };
 
 
+function CpLogArray() {
+
+}
+
+CpLogArray.prototype.print = function (data, width, height) {
+    for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) {
+            process.stdout.write(data[i * width + j] + " ");
+            //process.stderr.write("hello: ");
+        }
+        process.stderr.write("\n")
+    }
+}
+
 
 module.exports = {
-    mat: new CpLogMat()
+    mat: new CpLogMat(),
+    array: new CpLogArray()
 };
