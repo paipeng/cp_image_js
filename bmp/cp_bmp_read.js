@@ -74,6 +74,8 @@ BmpReader.prototype.parseRGBA = function () {
         channel = 3;
     }
     var len = this.width * this.height * channel;
+
+    this.pos = this.offset;
     this.data = new Uint8Array(len);
     this[bitn]();
 };
