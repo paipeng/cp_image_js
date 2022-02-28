@@ -9,12 +9,12 @@ function BmpWriter(imageFile, mat) {
 
 
 BmpWriter.prototype.setHeader = function () {
-    console.log('setHeader');
+    // console.log('setHeader');
     this.extraBytes = this.mat.width % 4;
     // 
     // row_size = 4 * ((mat -> width * bitsPerPixel + 31) / 32);
     this.rowSize = 4 * parseInt(((this.mat.width * 8 + 31) / 32));
-    console.log(this.rowSize);
+    // console.log(this.rowSize);
     this.rgbSize = this.mat.height * this.rowSize;//(this.mat.width + this.extraBytes);
     this.headerInfoSize = 40;
 
@@ -39,7 +39,7 @@ BmpWriter.prototype.setHeader = function () {
 
     this.offset = 54 + this.colors * 4;
     this.fileSize = this.rgbSize + this.offset;
-    console.log(this.fileSize);
+    // console.log(this.fileSize);
 }
 
 
@@ -48,7 +48,7 @@ BmpWriter.prototype.writeToFile = function (imageFile, data) {
 }
 
 BmpWriter.prototype.generateData = function () {
-    console.log('generateData');
+    // console.log('generateData');
     var tempBuffer = Buffer.alloc(this.fileSize);
     this.pos = 0;
     tempBuffer.write(this.flag, this.pos, 2); this.pos += 2;
