@@ -9,7 +9,7 @@ var mat = bmp.reader(imageFile);
 
 
 console.log(mat);
-// 0. crop 60%
+// 1. crop 60%
 var crop_factor = 0.6;
 var crop_offset_x = mat.width * ((1 - crop_factor) / 2);
 var crop_offset_y = mat.height * ((1 - crop_factor) / 2);
@@ -17,15 +17,14 @@ var cropMat = imageProcess.crop(mat).crop(parseInt(crop_offset_x), parseInt(crop
 bmp.writer('./test/detect_crop.bmp', cropMat);
 
 
-// 1. resize
+// 2. resize
 var resize_factor = 0.4;
 var resizeMat = imageProcess.resize(cropMat).resize(parseInt(cropMat.width * resize_factor), parseInt(cropMat.height * resize_factor));
 bmp.writer('./test/detect_resize.bmp', resizeMat);
 
 
 // 3. blur filter
-
-var blurMat = imageProcess.filter(resizeMat).blur(9);
+var blurMat = imageProcess.filter(resizeMat).blur(7);
 bmp.writer('./test/detect_blur.bmp', blurMat);
 
 // 4. mean
@@ -34,7 +33,7 @@ log.text.print('mean: ' + mean);
 
 
 // 5. binary
-var binaryMat = imageProcess.util().binary(blurMat, mean);
+var binaryMat = imageProcess.util().binary(blurMat, mean * 0.8);
 bmp.writer('./test/detect_binary.bmp', binaryMat);
 
 // 6. find contour
@@ -50,6 +49,4 @@ bmp.writer('./test/detect_contour_points_draw_rectangle.bmp', drawShapeMat);
 var avgRectangle = imageProcess.contour(binaryMat).getAvgShape(points);
 var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 60);
 bmp.writer('./test/detect_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
-
-
 //log.mat.print(resizeMat);
