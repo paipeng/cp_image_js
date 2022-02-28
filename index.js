@@ -41,4 +41,11 @@ log.text.print('mean: ' + mean);
 var binaryMat = imageProcess.util().binary(blurMat, mean);
 bmp.writer('./test/out_binary.bmp', binaryMat);
 
+// 6. find contour
+var points = imageProcess.contour(binaryMat).findContour();
+var drawMat = imageProcess.draw(binaryMat).drawPoints(points, 0);
+bmp.writer('./test/out_contour_points_draw.bmp', drawMat);
+
+
+
 //log.mat.print(resizeMat);
