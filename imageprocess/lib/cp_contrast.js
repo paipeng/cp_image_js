@@ -1,6 +1,6 @@
 
 var util = require('./cp_util');
-var log = require('../log/cp_log');
+var log = require('../../log/cp_log');
 
 function CpContrast(mat) {
     this.mat = mat;

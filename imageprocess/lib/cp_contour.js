@@ -1,5 +1,5 @@
 
-var log = require("../log/cp_log");
+var log = require("../../log/cp_log");
 
 function CpContour(mat) {
     this.mat = mat;

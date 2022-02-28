@@ -1,12 +1,12 @@
 
 
-var resize = require('./cp_resize');
-var crop = require('./cp_crop');
-var filter = require('./cp_filter');
-var util = require('./cp_util');
-var contour = require('./cp_contour');
-var draw = require('./cp_draw');
-var contrast = require('./cp_contrast');
+var resize = require('./lib/cp_resize');
+var crop = require('./lib/cp_crop');
+var filter = require('./lib/cp_filter');
+var util = require('./lib/cp_util');
+var contour = require('./lib/cp_contour');
+var draw = require('./lib/cp_draw');
+var contrast = require('./lib/cp_contrast');
 
 module.exports = {
     resize: resize,
