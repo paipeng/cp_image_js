@@ -52,4 +52,6 @@ bmp.writer('./test/detect_contour_points_draw_rectangle.bmp', drawShapeMat);
 var avgRectangle = imageProcess.contour(binaryMat).getAvgShape(points);
 var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 60);
 bmp.writer('./test/detect_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
+
+// 7. check size validation -> recrop /resize -> convert to bmp base64 string
 //log.mat.print(resizeMat);
