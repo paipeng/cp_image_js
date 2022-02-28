@@ -11,23 +11,27 @@ CPFilter.prototype.blur = function (filter_size) {
     var filter_size = (filter_size % 2 == 1) ? filter_size : (filter_size + 1);
     var blur_filter = new Float32Array(filter_size * filter_size);
     for (var i = 0; i < filter_size * filter_size; i++) {
-        blur_filter[i] = 1 / (filter_size * filter_size);
+        blur_filter[i] = 1;
     }
 
     var temp = new Uint8Array((this.mat.width) * (this.mat.height));
-    for (var i = 0; i < (this.mat.width) * (this.mat.height); i++) {
-        temp[i] = 255;
-    }
 
-    for (var i = 0; i < this.mat.height - filter_size; i++) {
-        for (var j = 0; j < this.mat.width - filter_size; j++) {
+
+    // console.log('filter_size /2 : ' + parseInt(-filter_size / 2));
+
+    for (var i = 0; i < this.mat.height; i++) {
+        for (var j = 0; j < this.mat.width; j++) {
             var pixel = 0;
-            for (var k = 0; k < filter_size; k++) {
-                for (var l = 0; l < filter_size; l++) {
-                    pixel += this.mat.data[(i + k) * this.mat.width + (j + l)] * (blur_filter[k * filter_size + l]);
+            var count = 0;
+            for (var k = parseInt(-filter_size / 2); k <= parseInt(filter_size / 2); k++) {
+                for (var l = parseInt(-filter_size / 2); l <= parseInt(filter_size / 2); l++) {
+                    if ((i + k) >= 0 && (i + k) < this.mat.height && (j + l) >= 0 && (j + l) < this.mat.width) {
+                        pixel += this.mat.data[(i + k) * this.mat.width + (j + l)] * (blur_filter[(k + parseInt(filter_size / 2)) * filter_size + (l + parseInt(filter_size / 2))]);
+                        count++;
+                    }
                 }
             }
-            temp[i * this.mat.width + j] = parseInt(pixel);
+            temp[i * this.mat.width + j] = parseInt(pixel / count);
         }
     }
 
