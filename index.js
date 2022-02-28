@@ -46,10 +46,15 @@ var points = imageProcess.contour(binaryMat).findContour();
 var drawMat = imageProcess.draw(binaryMat).drawPoints(points, 0);
 bmp.writer('./test/out_contour_points_draw.bmp', drawMat);
 
-var rectangle = imageProcess.contour(binaryMat).getShape(points, 125);
+var rectangle = imageProcess.contour(binaryMat).getShape(points);
+// get max rectangle shape
 var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawMat, rectangle, 120);
-
 bmp.writer('./test/out_contour_points_draw_rectangle.bmp', drawShapeMat);
+// get avg rectangle shape
+var avgRectangle = imageProcess.contour(binaryMat).getAvgShape(points);
+var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 60);
+bmp.writer('./test/out_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
+
 
 
 

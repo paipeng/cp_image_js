@@ -106,7 +106,7 @@ CpContour.prototype.closeContour = function (points) {
 };
 
 
-CpContour.prototype.getShape = function (points) {
+CpContour.prototype.getCenter = function (points) {
     // get center point
     var sum_x = 0, sum_y = 0;
     for (var point of points) {
@@ -115,8 +115,15 @@ CpContour.prototype.getShape = function (points) {
     }
     var center_x = sum_x / points.length;
     var center_y = sum_y / points.length;
-    // get top bottom left right (max)
+    return {
+        x: center_x,
+        y: center_y
+    };
+};
 
+CpContour.prototype.getShape = function (points) {
+    // get top bottom left right (max)
+    // max
     var top = -1, bottom = -1, left = -1, right = -1;
     for (var point of points) {
         if (point.x < left || left == -1) {
@@ -133,6 +140,7 @@ CpContour.prototype.getShape = function (points) {
         }
     }
 
+
     return {
         top: top,
         left: left,
@@ -141,6 +149,65 @@ CpContour.prototype.getShape = function (points) {
     };
 };
 
+
+CpContour.prototype.getAvgShape = function (points) {
+    var center = this.getCenter(points);
+    var rect = this.getShape(points);
+
+    // avg
+    var avg_top = 0, avg_bottom = 0, avg_left = 0, avg_right = 0;
+    var avg_top_count = 0, avg_bottom_count = 0, avg_left_count = 0, avg_right_count = 0;
+
+    for (var point of points) {
+        if (point.y < center.y && point.x > rect.left * 1.1 && point.x < rect.right * 0.9) {
+            avg_top_count++;
+            avg_top += point.y;
+        } else if (point.y > center.y && point.x > rect.left * 1.1 && point.x < rect.right * 0.9) {
+            avg_bottom_count++;
+            avg_bottom += point.y;
+        }
+        if (point.x < center.x && point.y > rect.top * 1.1 && point.y < rect.bottom * 0.9) {
+            avg_left_count++;
+            avg_left += point.x;
+        } else if (point.x > center.x && point.y > rect.top * 1.1 && point.y < rect.bottom * 0.9) {
+            avg_right_count++;
+            avg_right += point.x;
+        }
+    }
+
+    if (avg_top_count > 0) {
+        avg_top = parseInt(avg_top / avg_top_count);
+    } else {
+        avg_top = 0;
+    }
+
+    if (avg_bottom_count > 0) {
+        avg_bottom = parseInt(avg_bottom / avg_bottom_count);
+    } else {
+        avg_bottom = 0;
+    }
+
+    if (avg_left_count > 0) {
+        avg_left = parseInt(avg_left / avg_left_count);
+    } else {
+        avg_left = 0;
+    }
+
+    if (avg_right_count > 0) {
+        avg_right = parseInt(avg_right / avg_right_count);
+    } else {
+        avg_right = 0;
+    }
+
+
+    return {
+        top: avg_top,
+        left: avg_left,
+        right: avg_right,
+        bottom: avg_bottom
+    };
+
+};
 CpContour.prototype.getPoints = function (points) {
     var log = "";
     for (var i = 0; i < points.length; i++) {
