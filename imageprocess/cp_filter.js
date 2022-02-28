@@ -15,6 +15,9 @@ CPFilter.prototype.blur = function (filter_size) {
     }
 
     var temp = new Uint8Array((this.mat.width) * (this.mat.height));
+    for (var i = 0; i < (this.mat.width) * (this.mat.height); i++) {
+        temp[i] = 255;
+    }
 
     for (var i = 0; i < this.mat.height - filter_size; i++) {
         for (var j = 0; j < this.mat.width - filter_size; j++) {
