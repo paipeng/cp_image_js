@@ -104,6 +104,43 @@ CpContour.prototype.followContour = function (startPoint) {
 CpContour.prototype.closeContour = function (points) {
     //console.log("pixels: ",this.pixels);
 };
+
+
+CpContour.prototype.getShape = function (points) {
+    // get center point
+    var sum_x = 0, sum_y = 0;
+    for (var point of points) {
+        sum_x += point.x;
+        sum_y += point.y;
+    }
+    var center_x = sum_x / points.length;
+    var center_y = sum_y / points.length;
+    // get top bottom left right (max)
+
+    var top = -1, bottom = -1, left = -1, right = -1;
+    for (var point of points) {
+        if (point.x < left || left == -1) {
+            left = point.x;
+        }
+        if (point.x > right || right == -1) {
+            right = point.x;
+        }
+        if (point.y < top || top == -1) {
+            top = point.y;
+        }
+        if (point.y > bottom || bottom == -1) {
+            bottom = point.y;
+        }
+    }
+
+    return {
+        top: top,
+        left: left,
+        right: right,
+        bottom: bottom
+    };
+};
+
 CpContour.prototype.getPoints = function (points) {
     var log = "";
     for (var i = 0; i < points.length; i++) {
