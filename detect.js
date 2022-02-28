@@ -8,7 +8,7 @@ var imageFile = './test/b3954792-590a-44b6-8ce6-cc69b948b5f2.bmp';
 var mat = bmp.reader(imageFile);
 
 
-console.log(mat);
+// console.log(mat);
 // 1. crop 60%
 var crop_factor = 0.6;
 var crop_offset_x = mat.width * ((1 - crop_factor) / 2);
@@ -29,11 +29,14 @@ bmp.writer('./test/detect_blur.bmp', blurMat);
 
 // 4. mean
 var mean = imageProcess.util().mean(blurMat);
-log.text.print('mean: ' + mean);
+log.text.print('mean: ' + mean + '\n');
 
+// 4-2 improve contrast
+var contrastMat = imageProcess.contrast(blurMat).improve(mean * 0.8, 1.1);
+bmp.writer('./test/detect_contrast.bmp', contrastMat);
 
 // 5. binary
-var binaryMat = imageProcess.util().binary(blurMat, mean * 0.8);
+var binaryMat = imageProcess.util().binary(contrastMat, mean * 0.8);
 bmp.writer('./test/detect_binary.bmp', binaryMat);
 
 // 6. find contour
