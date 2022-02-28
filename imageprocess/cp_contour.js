@@ -56,7 +56,6 @@ CpContour.prototype.followContour = function (startPoint) {
     var nextNeighbor = 0; // starting point for neighborhood search (index for neighborhood array)
     do {
         //console.log("  point: ",point.x,point.y);
-
         // go clockwise trough neighbors  
         var index = point.x + point.y * w;
         this.pixels[index] = 0; // r
@@ -79,10 +78,8 @@ CpContour.prototype.followContour = function (startPoint) {
                 nextNeighbor = neighborhood[i].next;
                 break;
             }
-
             i++;
             i = i % neighborhood.length;
-
         }
         if (newPoint == undefined) {
             break;
@@ -91,11 +88,8 @@ CpContour.prototype.followContour = function (startPoint) {
             point = newPoint;
             points.push(point);
             //console.log("      points: ",this.getPoints(points));
-
         }
-
         prevIndex = index;
-
         //var index = y*w*4+x*4; 
         numPoints++;
         //console.log(point[0],startPoint[0],"  ",point[1],startPoint[1]);
@@ -104,7 +98,6 @@ CpContour.prototype.followContour = function (startPoint) {
 
     this.closeContour(points);
     //console.log(points);
-
     return points;
 };
 
