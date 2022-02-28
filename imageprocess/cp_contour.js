@@ -103,7 +103,7 @@ CpContour.prototype.followContour = function (startPoint) {
     } while (!(point.x == startPoint.x && point.y == startPoint.y) && numPoints < this.maxContourPoints);
 
     this.closeContour(points);
-    console.log(points);
+    //console.log(points);
 
     return points;
 };
