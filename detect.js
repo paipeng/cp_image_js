@@ -32,7 +32,7 @@ var mean = imageProcess.util().mean(blurMat);
 log.text.print('mean: ' + mean + '\n');
 
 // 4-2 improve contrast
-var contrastMat = imageProcess.contrast(blurMat).improve(mean * 0.8, 1.1);
+var contrastMat = imageProcess.contrast(blurMat).improve(mean * 0.8, 1.05);
 bmp.writer('./test/detect_contrast.bmp', contrastMat);
 
 // 5. binary
