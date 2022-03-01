@@ -67,8 +67,8 @@ CpContour.prototype.followContour = function (startPoint) {
         for (var j = 0; j < neighborhood.length; j++) {
 
             //console.log("    neighbor: ",i);
-            var nIndex = index + neighborhood[i].offs * 4;
             //console.log("      neighbor index: ",nIndex);
+            var nIndex = index + neighborhood[i].offs * 2;
             //console.log("      neighbor g index: ",nIndex+1);
             //console.log("      value: ",this.pixels[nIndex+1]);
             // todo: check if in range
