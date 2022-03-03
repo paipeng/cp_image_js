@@ -23,9 +23,17 @@ var resizeMat = imageProcess.resize(cropMat).resize(parseInt(cropMat.width * res
 bmp.writer('./test/detect_resize.bmp', resizeMat);
 
 
+
+var sharpness = imageProcess.sharpness(resizeMat).SMD();
+console.log("sharpness: " + sharpness);
+
 // 3. blur filter
 var blurMat = imageProcess.filter(resizeMat).blur(7);
 bmp.writer('./test/detect_blur.bmp', blurMat);
+
+sharpness = imageProcess.sharpness(blurMat).SMD();
+console.log("sharpness: " + sharpness);
+
 
 // 4. mean
 var mean = imageProcess.util().mean(blurMat);

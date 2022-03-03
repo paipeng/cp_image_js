@@ -7,6 +7,7 @@ var util = require('./lib/cp_util');
 var contour = require('./lib/cp_contour');
 var draw = require('./lib/cp_draw');
 var contrast = require('./lib/cp_contrast');
+var sharpness = require('./lib/cp_sharpness');
 
 module.exports = {
     resize: resize,
@@ -15,5 +16,6 @@ module.exports = {
     util: util,
     contour: contour,
     draw: draw,
-    contrast: contrast
+    contrast: contrast,
+    sharpness: sharpness
 };
