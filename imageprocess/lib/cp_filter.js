@@ -1,6 +1,6 @@
 
 
-var log = require("../../log/cp_log");
+//var log = require("../../log/cp_log");
 function CPFilter(mat) {
     this.mat = mat;
 }

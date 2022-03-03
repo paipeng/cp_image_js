@@ -1,5 +1,5 @@
 
-var log = require("../../log/cp_log");
+//var log = require("../../log/cp_log");
 
 function CpContour(mat) {
     this.mat = mat;
@@ -27,12 +27,12 @@ CpContour.prototype.findContour = function () {
         }
     }
 
-    log.text.print('start: ' + start_x + '-' + start_y + '\n');
+    //log.text.print('start: ' + start_x + '-' + start_y + '\n');
     return this.followContour({ x: start_x, y: start_y });
 };
 
 CpContour.prototype.followContour = function (startPoint) {
-    console.log("followContour @", startPoint);
+    //console.log("followContour @", startPoint);
     points = []; // start new contour
     points.push(startPoint);
     var w = this.mat.width;
