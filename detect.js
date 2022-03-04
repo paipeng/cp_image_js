@@ -47,6 +47,15 @@ bmp.writer('./test/detect_contrast.bmp', contrastMat);
 var binaryMat = imageProcess.util().binary(contrastMat, mean * 0.8);
 bmp.writer('./test/detect_binary.bmp', binaryMat);
 
+// 5.1 erosion
+var erosionMat = imageProcess.erosion(binaryMat).erosion(3);
+bmp.writer('./test/detect_erosion.bmp', erosionMat);
+
+
+// 5.2 dilate
+var dilateMat = imageProcess.dilate(erosionMat).dilate(3);
+bmp.writer('./test/detect_dilate.bmp', dilateMat);
+
 // 6. find contour
 var points = imageProcess.contour(binaryMat).findContour();
 var drawMat = imageProcess.draw(binaryMat).drawPoints(points, 0);
