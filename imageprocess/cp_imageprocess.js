@@ -8,6 +8,8 @@ var contour = require('./lib/cp_contour');
 var draw = require('./lib/cp_draw');
 var contrast = require('./lib/cp_contrast');
 var sharpness = require('./lib/cp_sharpness');
+var dilate = require('./lib/cp_dilate');
+var erosion = require('./lib/cp_erosion');
 
 module.exports = {
     resize: resize,
@@ -17,5 +19,7 @@ module.exports = {
     contour: contour,
     draw: draw,
     contrast: contrast,
-    sharpness: sharpness
+    sharpness: sharpness,
+    dilate: dilate,
+    erosion: erosion
 };
