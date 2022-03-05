@@ -20,6 +20,21 @@ CpUtil.prototype.binary = function (mat, threshold) {
     };
 };
 
+CpUtil.prototype.invert = function (mat) {
+    var temp = new Uint8Array(mat.width * mat.height);
+    for (var i = 0; i < mat.height; i++) {
+        for (var j = 0; j < mat.height * mat.channel; j++) {
+            temp[i * mat.height * mat.channel + j] = 255 - mat.data[i * mat.height * mat.channel + j];
+        }
+    }
+    return {
+        width: mat.width,
+        height: mat.height,
+        channel: 1,
+        data: temp
+    };
+}
+
 
 CpUtil.prototype.mean = function (mat) {
     var sum = 0;
