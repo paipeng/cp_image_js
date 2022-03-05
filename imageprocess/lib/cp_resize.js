@@ -20,8 +20,8 @@ CPReisze.prototype.resize = function (resizeWidth, resizeHeight) {
             index = (y * this.mat.width + x);
             a = this.mat.data[index];
             b = this.mat.data[index + 1];
-            c = this.mat.data[index + this.mat.height];
-            d = this.mat.data[index + this.mat.height + 1];
+            c = this.mat.data[index + this.mat.width];
+            d = this.mat.data[index + this.mat.width + 1];
 
             // gray element
             // Yb = Ab(1-w)(1-h) + Bb(w)(1-h) + Cb(h)(1-w) + Db(wh)
