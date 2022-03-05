@@ -77,7 +77,7 @@ CPLabel.prototype.label = function (startPoint) {
 
 
 
-    console.log(points);
+    //console.log(points);
 
     return {
         width: this.mat.width,
