@@ -4,13 +4,14 @@ var bmp = require("./bmp/cp_bmp");
 var imageProcess = require("./imageprocess/cp_imageprocess");
 
 var imageFile = './test/b3954792-590a-44b6-8ce6-cc69b948b5f2.bmp';
+imageFile = './output/06b1be8c-0ef5-4cc7-8817-478cf2f67b75.bmp';
 
 var mat = bmp.reader(imageFile);
 
 
 // console.log(mat);
 // 1. crop 60%
-var crop_factor = 0.6;
+var crop_factor = 0.8;
 var crop_offset_x = mat.width * ((1 - crop_factor) / 2);
 var crop_offset_y = mat.height * ((1 - crop_factor) / 2);
 var cropMat = imageProcess.crop(mat).crop(parseInt(crop_offset_x), parseInt(crop_offset_y), parseInt(mat.width * crop_factor), parseInt(mat.height * crop_factor));
@@ -24,11 +25,17 @@ bmp.writer('./test/detect_resize.bmp', resizeMat);
 
 
 
+// 2.2 erosion
+var erosionMat = imageProcess.erosion(resizeMat).erosion(3);
+bmp.writer('./test/detect_erosion1.bmp', erosionMat);
+
+
+
 var sharpness = imageProcess.sharpness(resizeMat).SMD();
 console.log("sharpness: " + sharpness);
 
 // 3. blur filter
-var blurMat = imageProcess.filter(resizeMat).blur(7);
+var blurMat = imageProcess.filter(erosionMat).blur(7);
 bmp.writer('./test/detect_blur.bmp', blurMat);
 
 sharpness = imageProcess.sharpness(blurMat).SMD();
@@ -56,8 +63,22 @@ bmp.writer('./test/detect_erosion.bmp', erosionMat);
 var dilateMat = imageProcess.dilate(erosionMat).dilate(3);
 bmp.writer('./test/detect_dilate.bmp', dilateMat);
 
+
+
+// 6.0 labeling
+
+// 5.1 labeling
+var labelMat = imageProcess.label(erosionMat).label({ x: binaryMat.width / 2, y: binaryMat.height / 2 });
+bmp.writer('./test/label_mat.bmp', labelMat);
+
+var invertMat = imageProcess.util().invert(labelMat);
+//log.mat.print(invertMat);
+bmp.writer('./test/invert_mat.bmp', invertMat);
+
+
+
 // 6. find contour
-var points = imageProcess.contour(binaryMat).findContour();
+var points = imageProcess.contour(invertMat).findContour();
 var drawMat = imageProcess.draw(binaryMat).drawPoints(points, 0);
 bmp.writer('./test/detect_contour_points_draw.bmp', drawMat);
 

@@ -4,15 +4,39 @@ var bmp = require("./bmp/cp_bmp");
 var imageProcess = require("./imageprocess/cp_imageprocess");
 
 var imageFile = './test/detect_erosion.bmp';
+imageFile = './output/06b1be8c-0ef5-4cc7-8817-478cf2f67b75.bmp';
 
 var mat = bmp.reader(imageFile);
+log.text.print('mat size: ' + mat.width + '-' + mat.height + ' // ' + mat.channel + '\n');
+
+
+// 2. resize
+var resize_factor = 0.4;
+var resizeMat = imageProcess.resize(mat).resize(parseInt(mat.width * resize_factor), parseInt(mat.height * resize_factor));
+bmp.writer('./output/detect_resize.bmp', resizeMat);
+
+
+
+
+
+var sharpness = imageProcess.sharpness(resizeMat).SMD();
+console.log("sharpness: " + sharpness);
+
+// 3. blur filter
+var blurMat = imageProcess.filter(resizeMat).blur(7);
+bmp.writer('./output/detect_blur.bmp', blurMat);
+
+sharpness = imageProcess.sharpness(blurMat).SMD();
+console.log("sharpness: " + sharpness);
+
+
 
 // 4. mean
-var mean = imageProcess.util().mean(mat);
+var mean = imageProcess.util().mean(blurMat);
 log.text.print('mean: ' + mean + '\n');
 
 // 5. binary
-var binaryMat = imageProcess.util().binary(mat, mean * 0.8);
+var binaryMat = imageProcess.util().binary(blurMat, mean * 0.8);
 bmp.writer('./output/detect_binary.bmp', binaryMat);
 
 
