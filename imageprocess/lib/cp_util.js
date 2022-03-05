@@ -37,12 +37,13 @@ CpUtil.prototype.invert = function (mat) {
 
 
 CpUtil.prototype.mean = function (mat) {
-    var sum = 0;
+    let sum = new Number(0);
     for (var i = 0; i < mat.height; i++) {
-        for (var j = 0; j < mat.height * mat.channel; j++) {
-            sum += mat.data[i * mat.height * mat.channel + j];
+        for (var j = 0; j < mat.width * mat.channel; j++) {
+            sum += mat.data[i * mat.width * mat.channel + j];
         }
     }
+    console.log(sum);
     return sum / (mat.width * mat.height);
 };
 
