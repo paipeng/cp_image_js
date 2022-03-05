@@ -10,6 +10,7 @@ var contrast = require('./lib/cp_contrast');
 var sharpness = require('./lib/cp_sharpness');
 var dilate = require('./lib/cp_dilate');
 var erosion = require('./lib/cp_erosion');
+var label = require('./lib/cp_label');
 
 module.exports = {
     resize: resize,
@@ -21,5 +22,6 @@ module.exports = {
     contrast: contrast,
     sharpness: sharpness,
     dilate: dilate,
-    erosion: erosion
+    erosion: erosion,
+    label: label
 };
