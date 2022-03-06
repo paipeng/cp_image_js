@@ -2,6 +2,7 @@
 var log = require("../log/cp_log");
 var bmp = require("../bmp/cp_bmp");
 var imageProcess = require("../imageprocess/cp_imageprocess");
+const { crop } = require("../imageprocess/cp_imageprocess");
 
 function CPDetect(mat) {
     this.mat = mat;
@@ -45,7 +46,7 @@ CPDetect.prototype.checkDetectState = function () {
 
 };
 
-CPDetect.prototype.postProcess = function (mat, detectedRect) {
+CPDetect.prototype.postProcess = function (detectedRect) {
     console.log('postProcess: ', detectedRect);
     var cropWidth = parseInt(640 * (detectedRect.right - detectedRect.left) / 432);
     var cropHeight = cropWidth;
@@ -78,10 +79,10 @@ CPDetect.prototype.postProcess = function (mat, detectedRect) {
 
 
     var resizeCropMat = imageProcess.resize(cropMat).resize(this.detectParam.resize_width, this.detectParam.resize_height);
-    bmp.writer('./detect_output/detect_post_crop_resize.bmp', resizeCropMat);
 
+
+    return resizeCropMat;
 };
-
 
 
 CPDetect.prototype.detect = function (detectParam) {
@@ -162,8 +163,28 @@ CPDetect.prototype.detect = function (detectParam) {
     // 7. check size validation -> recrop /resize -> convert to bmp base64 string
 
 
-    var detectedMat = this.postProcess(resizeMat, avgRectangle);
-    //bmp.writer('./detect_output/detected_mat.bmp', detectedMat);
+    var detectedMat = this.postProcess(avgRectangle);
+    bmp.writer('./detect_output/detected_mat.bmp', detectedMat);
+
+    // check sharpness
+    var c_width = parseInt(432 * 0.9);
+    var c_height = parseInt(360 * 0.9);
+
+    cropRect = {
+        top: parseInt((detectedMat.height - c_height) / 2),
+        left: parseInt((detectedMat.width - c_width) / 2),
+        right: parseInt((detectedMat.width - c_width) / 2) + c_width,
+        bottom: parseInt((detectedMat.height - c_height) / 2) + c_height
+    }
+    sharpness = imageProcess.sharpness(detectedMat).sharpness(cropRect);
+    var cropMat = imageProcess.crop(detectedMat).cropRect({
+        x: cropRect.left,
+        y: cropRect.top,
+        width: cropRect.right - cropRect.left,
+        height: cropRect.bottom - cropRect.top
+    });
+    bmp.writer('./detect_output/detected_mat_crop.bmp', cropMat);
+    console.log("sharpness: " + sharpness);
 
     //log.mat.print(resizeMat);
 };
