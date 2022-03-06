@@ -6,6 +6,14 @@ const { crop } = require("../imageprocess/cp_imageprocess");
 
 function CPDetect(mat) {
     this.mat = mat;
+
+    // 0 
+    // conver to gray
+
+    this.grayMat = imageProcess.util().gray(this.mat);
+    bmp.writer('./detect_output/detect_gray.bmp', this.grayMat);
+
+
     this.crop_factor = 0.8;
     this.resize_factor = 0.4;
     this.detectResult = {
@@ -17,7 +25,7 @@ function CPDetect(mat) {
         x2: 0,
         y1: 0,
         y2: 0
-    }
+    };
 }
 
 CPDetect.prototype.getCropRect = function (crop_factor) {
@@ -74,7 +82,7 @@ CPDetect.prototype.postProcess = function (detectedRect) {
     }
     // crop with border
     console.log('resize factor', cropRect);
-    var cropMat = imageProcess.crop(this.mat).cropRect(cropRect);
+    var cropMat = imageProcess.crop(this.grayMat).cropRect(cropRect);
     bmp.writer('./detect_output/detect_post_crop.bmp', cropMat);
 
 
@@ -89,10 +97,14 @@ CPDetect.prototype.detect = function (detectParam) {
     this.detectParam = detectParam;
     console.log('detect: ', detectParam);
     console.log('mat size: ' + this.mat.width + '-' + this.mat.height);
+
+
+
+
     // 1. crop
     var cropRect = this.getCropRect(detectParam.crop_factor);
     console.log(cropRect);
-    var cropMat = imageProcess.crop(this.mat).cropRect(cropRect);
+    var cropMat = imageProcess.crop(this.grayMat).cropRect(cropRect);
     bmp.writer('./detect_output/detect_crop.bmp', cropMat);
 
     // 2. resize

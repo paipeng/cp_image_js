@@ -25,6 +25,7 @@
   "homepage": "https://github.com/paipeng/cp_image_js#readme",
   "dependencies": {
     "fs": "0.0.1-security",
+    "jpeg-js": "^0.4.3",
     "npmlog": "^6.0.1"
   }
 }
