@@ -26,6 +26,7 @@ function CPDetect(mat) {
         y1: 0,
         y2: 0
     };
+    this.detect_state = 0;
 }
 
 CPDetect.prototype.getCropRect = function (crop_factor) {
@@ -172,44 +173,54 @@ CPDetect.prototype.detect = function (detectParam) {
     var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 60);
     bmp.writer('./detect_output/6_3_detect_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
 
+    avgRectangle = rectangle;
     this.detectResult.x1 = parseInt(avgRectangle.left / this.resize_factor);
     this.detectResult.y1 = parseInt(avgRectangle.top / this.resize_factor);
     this.detectResult.x2 = parseInt(avgRectangle.right / this.resize_factor);
     this.detectResult.y2 = parseInt(avgRectangle.bottom / this.resize_factor);
 
-    // 7. check size validation -> recrop /resize -> convert to bmp base64 string
-
-    if ((this.detectResult.x2 - this.detectResult.x1) < 240) {
-        // too small
-    }
 
     var detectedMat = this.postProcess(avgRectangle);
-    bmp.writer('./detect_output/detected_mat.bmp', detectedMat);
+    bmp.writer('./detect_output/7_detected_mat.bmp', detectedMat);
 
-    // check sharpness
-    var c_width = parseInt(432 * 0.9);
-    var c_height = parseInt(360 * 0.9);
+    // 7. check size validation -> recrop /resize -> convert to bmp base64 string
+    if ((this.detectResult.x2 - this.detectResult.x1) < 240) {
+        // too small
+        this.detect_state = 5;
+    } else {
 
-    cropRect = {
-        top: parseInt((detectedMat.height - c_height) / 2),
-        left: parseInt((detectedMat.width - c_width) / 2),
-        right: parseInt((detectedMat.width - c_width) / 2) + c_width,
-        bottom: parseInt((detectedMat.height - c_height) / 2) + c_height
+        // check sharpness
+        var c_width = parseInt(432 * 0.9);
+        var c_height = parseInt(360 * 0.9);
+
+        cropRect = {
+            top: parseInt((detectedMat.height - c_height) / 2),
+            left: parseInt((detectedMat.width - c_width) / 2),
+            right: parseInt((detectedMat.width - c_width) / 2) + c_width,
+            bottom: parseInt((detectedMat.height - c_height) / 2) + c_height
+        }
+        this.detectResult.sharpness = imageProcess.sharpness(detectedMat).sharpness(cropRect);
+        var cropMat = imageProcess.crop(detectedMat).cropRect({
+            x: cropRect.left,
+            y: cropRect.top,
+            width: cropRect.right - cropRect.left,
+            height: cropRect.bottom - cropRect.top
+        });
+        bmp.writer('./detect_output/7_1_detected_mat_crop.bmp', cropMat);
+        console.log("sharpness: " + this.detectResult.sharpness);
+
+        if (this.detectResult.sharpness < this.detectParam.min_sharpness) {
+            this.detect_state = 7;
+        } else {
+            this.detect_state = 9;
+        }
+        //log.mat.print(resizeMat);
     }
-    sharpness = imageProcess.sharpness(detectedMat).sharpness(cropRect);
-    var cropMat = imageProcess.crop(detectedMat).cropRect({
-        x: cropRect.left,
-        y: cropRect.top,
-        width: cropRect.right - cropRect.left,
-        height: cropRect.bottom - cropRect.top
-    });
-    bmp.writer('./detect_output/detected_mat_crop.bmp', cropMat);
-    console.log("sharpness: " + sharpness);
 
-    //log.mat.print(resizeMat);
+
 
     return {
-        detect_state: 0,
+        detect_state: this.detect_state,
         detectedMat: detectedMat,
         detectResult: this.detectResult
     };

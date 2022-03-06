@@ -21,11 +21,14 @@ mat.channel = mat.data.length / (mat.width * mat.height);
 //console.log(mat);
 
 
-cpDetect(mat).detect({
+var result = cpDetect(mat).detect({
     crop_factor: 0.8,
     resize_width: 640,
-    resize_height: 640
+    resize_height: 640,
+    min_sharpness: 20
 });
+
+console.log(result);
 
 // console.log(mat);
 
