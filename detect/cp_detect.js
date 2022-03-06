@@ -105,27 +105,27 @@ CPDetect.prototype.detect = function (detectParam) {
     var cropRect = this.getCropRect(detectParam.crop_factor);
     console.log(cropRect);
     var cropMat = imageProcess.crop(this.grayMat).cropRect(cropRect);
-    bmp.writer('./detect_output/detect_crop.bmp', cropMat);
+    bmp.writer('./detect_output/1_detect_crop.bmp', cropMat);
 
     // 2. resize
     var resizeMat = imageProcess.resize(cropMat).resize(parseInt(cropMat.width * this.resize_factor), parseInt(cropMat.height * this.resize_factor));
-    bmp.writer('./detect_output/detect_resize.bmp', resizeMat);
+    bmp.writer('./detect_output/2_0_detect_resize.bmp', resizeMat);
 
     // 2.1 contrast
-    var contrastMat = imageProcess.contrast(resizeMat).improve2(0.8, 20);
-    bmp.writer('./detect_output/detect_contrast_1.bmp', contrastMat);
+    var contrastMat = imageProcess.contrast(resizeMat).improve2(1.2, -50);
+    bmp.writer('./detect_output/2_1_detect_contrast_1.bmp', contrastMat);
 
 
     // 2.2 erosion
     var erosionMat = imageProcess.erosion(contrastMat).erosion(3);
-    bmp.writer('./detect_output/detect_erosion1.bmp', erosionMat);
+    bmp.writer('./detect_output/2_2_detect_erosion1.bmp', erosionMat);
 
     var sharpness = imageProcess.sharpness(resizeMat).SMD();
     console.log("sharpness: " + sharpness);
 
     // 3. blur filter
     var blurMat = imageProcess.filter(erosionMat).blur(7);
-    bmp.writer('./detect_output/detect_blur.bmp', blurMat);
+    bmp.writer('./detect_output/3_detect_blur.bmp', blurMat);
 
     sharpness = imageProcess.sharpness(blurMat).SMD();
     console.log("sharpness: " + sharpness);
@@ -136,15 +136,15 @@ CPDetect.prototype.detect = function (detectParam) {
 
     // 4-2 improve contrast
     contrastMat = imageProcess.contrast(blurMat).improve(mean * 0.8, 1.05);
-    bmp.writer('./detect_output/detect_contrast.bmp', contrastMat);
+    bmp.writer('./detect_output/4_2_detect_contrast.bmp', contrastMat);
 
     // 5. binary
     var binaryMat = imageProcess.util().binary(contrastMat, mean * 0.8);
-    bmp.writer('./detect_output/detect_binary.bmp', binaryMat);
+    bmp.writer('./detect_output/5_detect_binary.bmp', binaryMat);
 
     // 5.1 erosion
     var erosionMat = imageProcess.erosion(binaryMat).erosion(3);
-    //bmp.writer('./detect_output/detect_erosion.bmp', erosionMat);
+    bmp.writer('./detect_output/5_1_detect_erosion.bmp', erosionMat);
 
     // 5.2 dilate
     //var dilateMat = imageProcess.dilate(erosionMat).dilate(3);
@@ -152,25 +152,25 @@ CPDetect.prototype.detect = function (detectParam) {
 
     // 5.3 labeling
     var labelMat = imageProcess.label(erosionMat).label({ x: binaryMat.width / 2, y: binaryMat.height / 2 });
-    bmp.writer('./detect_output/label_mat.bmp', labelMat);
+    bmp.writer('./detect_output/5_2_detect_label.bmp', labelMat);
 
     var invertMat = imageProcess.util().invert(labelMat);
     //log.mat.print(invertMat);
-    bmp.writer('./detect_output/invert_mat.bmp', invertMat);
+    bmp.writer('./detect_output/5_3_detect_invert.bmp', invertMat);
 
     // 6. find contour
     var points = imageProcess.contour(invertMat).findContour();
     var drawMat = imageProcess.draw(binaryMat).drawPoints(points, 0);
-    bmp.writer('./detect_output/detect_contour_points_draw.bmp', drawMat);
+    bmp.writer('./detect_output/6_1_detect_contour_points_draw.bmp', drawMat);
 
     var rectangle = imageProcess.contour(binaryMat).getShape(points);
     // get max rectangle shape
     var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawMat, rectangle, 120);
-    bmp.writer('./detect_output/detect_contour_points_draw_rectangle.bmp', drawShapeMat);
+    bmp.writer('./detect_output/6_2_detect_contour_points_draw_rectangle.bmp', drawShapeMat);
     // get avg rectangle shape
     var avgRectangle = imageProcess.contour(binaryMat).getAvgShape(points);
     var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 60);
-    bmp.writer('./detect_output/detect_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
+    bmp.writer('./detect_output/6_3_detect_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
 
     this.detectResult.x1 = parseInt(avgRectangle.left / this.resize_factor);
     this.detectResult.y1 = parseInt(avgRectangle.top / this.resize_factor);
