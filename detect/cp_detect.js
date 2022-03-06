@@ -99,8 +99,13 @@ CPDetect.prototype.detect = function (detectParam) {
     var resizeMat = imageProcess.resize(cropMat).resize(parseInt(cropMat.width * this.resize_factor), parseInt(cropMat.height * this.resize_factor));
     bmp.writer('./detect_output/detect_resize.bmp', resizeMat);
 
+    // 2.1 contrast
+    var contrastMat = imageProcess.contrast(resizeMat).improve2(0.8, 20);
+    bmp.writer('./detect_output/detect_contrast_1.bmp', contrastMat);
+
+
     // 2.2 erosion
-    var erosionMat = imageProcess.erosion(resizeMat).erosion(3);
+    var erosionMat = imageProcess.erosion(contrastMat).erosion(3);
     bmp.writer('./detect_output/detect_erosion1.bmp', erosionMat);
 
     var sharpness = imageProcess.sharpness(resizeMat).SMD();
@@ -118,7 +123,7 @@ CPDetect.prototype.detect = function (detectParam) {
     log.text.print('mean: ' + mean + '\n');
 
     // 4-2 improve contrast
-    var contrastMat = imageProcess.contrast(blurMat).improve(mean * 0.8, 1.05);
+    contrastMat = imageProcess.contrast(blurMat).improve(mean * 0.8, 1.05);
     bmp.writer('./detect_output/detect_contrast.bmp', contrastMat);
 
     // 5. binary
@@ -162,6 +167,9 @@ CPDetect.prototype.detect = function (detectParam) {
 
     // 7. check size validation -> recrop /resize -> convert to bmp base64 string
 
+    if ((this.detectResult.x2 - this.detectResult.x1) < 240) {
+        // too small
+    }
 
     var detectedMat = this.postProcess(avgRectangle);
     bmp.writer('./detect_output/detected_mat.bmp', detectedMat);
@@ -189,6 +197,7 @@ CPDetect.prototype.detect = function (detectParam) {
     //log.mat.print(resizeMat);
 
     return {
+        detect_state: 0,
         detectedMat: detectedMat,
         detectResult: this.detectResult
     };
