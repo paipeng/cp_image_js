@@ -3,11 +3,20 @@ var log = require("../log/cp_log");
 var bmp = require("../bmp/cp_bmp");
 var imageProcess = require("../imageprocess/cp_imageprocess");
 
-
 function CPDetect(mat) {
     this.mat = mat;
     this.crop_factor = 0.8;
     this.resize_factor = 0.4;
+    this.detectResult = {
+        major_version: 1,
+        minor_version: 0,
+        revision_number: 0,
+        detected_color_channel: 0,
+        x1: 0,
+        x2: 0,
+        y1: 0,
+        y2: 0
+    }
 }
 
 CPDetect.prototype.getCropRect = function (crop_factor) {
@@ -18,7 +27,61 @@ CPDetect.prototype.getCropRect = function (crop_factor) {
         height: parseInt(this.mat.height * crop_factor)
     };
 }
+
+
+CPDetect.prototype.getPostCropRect = function () {
+
+    return {
+        x: parseInt(this.mat.width * ((1 - crop_factor) / 2)),
+        y: parseInt(this.mat.height * ((1 - crop_factor) / 2)),
+        width: parseInt(this.mat.width * crop_factor),
+        height: parseInt(this.mat.height * crop_factor)
+    };
+}
+
+
+
+CPDetect.prototype.checkDetectState = function () {
+
+};
+
+CPDetect.prototype.postProcess = function (mat, detectedRect) {
+
+    console.log('postProcess: ', detectedRect);
+    var cropWidth = parseInt(640 * (detectedRect.right - detectedRect.left) / 432);
+    var cropHeight = cropWidth;
+
+    var cropX = parseInt((detectedRect.left - (cropWidth - (detectedRect.right - detectedRect.left)) / 2));
+    var cropY = parseInt((detectedRect.top - (cropHeight - (detectedRect.bottom - detectedRect.top)) / 2));
+
+
+    // resize
+    //cropX = parseInt(cropX / this.resize_factor);
+    //cropY = parseInt(cropY / this.resize_factor);
+    //cropWidth = parseInt(cropWidth / this.resize_factor);
+    //cropHeight = parseInt(cropHeight / this.resize_factor);
+    var cropRect = {
+        x: cropX,
+        y: cropY,
+        width: cropWidth,
+        height: cropHeight
+    }
+    // crop with border
+    console.log(cropRect);
+    var cropMat = imageProcess.crop(mat).cropRect(cropRect);
+    bmp.writer('./detect_output/detect_post_crop.bmp', cropMat);
+
+
+    var resizeCropMat = imageProcess.resize(cropMat).resize(this.detectParam.resize_width, this.detectParam.resize_height);
+    bmp.writer('./detect_output/detect_post_crop_resize.bmp', resizeCropMat);
+
+};
+
+
+
 CPDetect.prototype.detect = function (detectParam) {
+    this.detectParam = detectParam;
+    console.log('detect: ', detectParam);
     console.log('mat size: ' + this.mat.width + '-' + this.mat.height);
     // 1. crop
     var cropRect = this.getCropRect(detectParam.crop_factor);
@@ -30,13 +93,9 @@ CPDetect.prototype.detect = function (detectParam) {
     var resizeMat = imageProcess.resize(cropMat).resize(parseInt(cropMat.width * this.resize_factor), parseInt(cropMat.height * this.resize_factor));
     bmp.writer('./detect_output/detect_resize.bmp', resizeMat);
 
-
-
     // 2.2 erosion
     var erosionMat = imageProcess.erosion(resizeMat).erosion(3);
     bmp.writer('./detect_output/detect_erosion1.bmp', erosionMat);
-
-
 
     var sharpness = imageProcess.sharpness(resizeMat).SMD();
     console.log("sharpness: " + sharpness);
@@ -47,7 +106,6 @@ CPDetect.prototype.detect = function (detectParam) {
 
     sharpness = imageProcess.sharpness(blurMat).SMD();
     console.log("sharpness: " + sharpness);
-
 
     // 4. mean
     var mean = imageProcess.util().mean(blurMat);
@@ -63,26 +121,19 @@ CPDetect.prototype.detect = function (detectParam) {
 
     // 5.1 erosion
     var erosionMat = imageProcess.erosion(binaryMat).erosion(3);
-    bmp.writer('./detect_output/detect_erosion.bmp', erosionMat);
-
+    //bmp.writer('./detect_output/detect_erosion.bmp', erosionMat);
 
     // 5.2 dilate
-    var dilateMat = imageProcess.dilate(erosionMat).dilate(3);
-    bmp.writer('./detect_output/detect_dilate.bmp', dilateMat);
+    //var dilateMat = imageProcess.dilate(erosionMat).dilate(3);
+    //bmp.writer('./detect_output/detect_dilate.bmp', dilateMat);
 
-
-
-    // 6.0 labeling
-
-    // 5.1 labeling
+    // 5.3 labeling
     var labelMat = imageProcess.label(erosionMat).label({ x: binaryMat.width / 2, y: binaryMat.height / 2 });
     bmp.writer('./detect_output/label_mat.bmp', labelMat);
 
     var invertMat = imageProcess.util().invert(labelMat);
     //log.mat.print(invertMat);
     bmp.writer('./detect_output/invert_mat.bmp', invertMat);
-
-
 
     // 6. find contour
     var points = imageProcess.contour(invertMat).findContour();
@@ -98,7 +149,17 @@ CPDetect.prototype.detect = function (detectParam) {
     var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 60);
     bmp.writer('./detect_output/detect_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
 
+    this.detectResult.x1 = parseInt(avgRectangle.left / this.resize_factor);
+    this.detectResult.y1 = parseInt(avgRectangle.top / this.resize_factor);
+    this.detectResult.x2 = parseInt(avgRectangle.right / this.resize_factor);
+    this.detectResult.y2 = parseInt(avgRectangle.bottom / this.resize_factor);
+
     // 7. check size validation -> recrop /resize -> convert to bmp base64 string
+
+
+    var detectedMat = this.postProcess(resizeMat, avgRectangle);
+    //bmp.writer('./detect_output/detected_mat.bmp', detectedMat);
+
     //log.mat.print(resizeMat);
 };
 

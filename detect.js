@@ -11,8 +11,8 @@ var mat = bmp.reader(imageFile);
 
 cpDetect(mat).detect({
     crop_factor: 0.8,
-    resizeWidth: 640,
-    resizeHeight: 640
+    resize_width: 640,
+    resize_height: 640
 });
 
 // console.log(mat);
