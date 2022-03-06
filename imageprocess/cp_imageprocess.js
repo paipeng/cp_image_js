@@ -16,29 +16,31 @@ var label = require('./lib/cp_label');
 function CPIP() {
 
 }
-CPIP.prototype.create = function (mat, cropX, cropY, cropWidth, cropHeight, resizeWidth, resizeHeight) {
+CPIP.prototype.create = function (mat, cropRect, resizeWidth, resizeHeight) {
+    var cropX, cropY, cropWidth, cropHeight;
     var cropPixels = new Uint8Array(cropWidth * cropHeight);
     // set to white !
 
     // crop pixels
-    for (var i = cropY; i < cropHeight; i++) {
-        for (var j = cropX; j < cropWidth; j++) {
+    for (var i = cropRect.y; i < cropRect.height; i++) {
+        for (var j = cropRect.x; j < cropRect.width; j++) {
             if (i >= 0 && i < mat.height && j >= 0 && j < mat.width) {
-                cropPixels[(i - cropY) * mat.height * mat.channel + (j - cropX)] = mat.data[i * mat.height * mat.channel + j]
+                cropPixels[(i - cropRect.y) * mat.height * mat.channel + (j - cropRect.x)] = mat.data[i * mat.height * mat.channel + j]
             }
         }
     }
 
+    var cropMat = {
+        width: mat.width,
+        height: mat.height,
+        channel: 1,
+        data: cropPixels
+    };
     // resize
-    if (resizeWidth == cropWidth && resizeHeight == cropHeight) {
-        return resize(mat).resize(resizeWidth, resizeHeight);
+    if (resizeWidth == cropRect.width && resizeHeight == cropRect.height) {
+        return resize(cropMat).resize(resizeWidth, resizeHeight);
     } else {
-        return {
-            width: mat.width,
-            height: mat.height,
-            channel: 1,
-            data: temp
-        };
+        return cropMat;
     }
 };
 
