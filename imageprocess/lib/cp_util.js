@@ -50,18 +50,22 @@ CpUtil.prototype.mean = function (mat) {
 
 
 CpUtil.prototype.gray = function (mat) {
-    var temp = new Uint8Array(mat.width * mat.height);
-    for (var i = 0; i < mat.height; i++) {
-        for (var j = 0; j < mat.width * mat.channel; j += mat.channel) {
-            sum += mat.data[i * mat.width * mat.channel + j];
+    if (mat.channel == 4) {
+        var temp = new Uint8Array(mat.width * mat.height);
+        for (var i = 0; i < mat.height; i++) {
+            for (var j = 0; j < mat.width * mat.channel; j += mat.channel) {
+                temp[i * mat.width / mat.channel + j] = parseInt((mat.data[i * mat.height * mat.channel + j] + mat.data[i * mat.height * mat.channel + j + 1] + mat.data[i * mat.height * mat.channel + j + 2]) / 3);
+            }
         }
+        return {
+            width: mat.width,
+            height: mat.height,
+            channel: 1,
+            data: temp
+        };
+    } else {
+        return mat;
     }
-    return {
-        width: mat.width,
-        height: mat.height,
-        channel: 1,
-        data: temp
-    };
 };
 
 module.exports = function () {
