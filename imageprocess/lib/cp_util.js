@@ -47,6 +47,23 @@ CpUtil.prototype.mean = function (mat) {
     return sum / (mat.width * mat.height);
 };
 
+
+
+CpUtil.prototype.gray = function (mat) {
+    var temp = new Uint8Array(mat.width * mat.height);
+    for (var i = 0; i < mat.height; i++) {
+        for (var j = 0; j < mat.width * mat.channel; j += mat.channel) {
+            sum += mat.data[i * mat.width * mat.channel + j];
+        }
+    }
+    return {
+        width: mat.width,
+        height: mat.height,
+        channel: 1,
+        data: temp
+    };
+};
+
 module.exports = function () {
     var util = new CpUtil();
     return util;
