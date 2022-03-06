@@ -27,6 +27,25 @@ CpContrast.prototype.improve = function (threshold, factor) {
     return this.mat;
 };
 
+
+
+CpContrast.prototype.improve2 = function (factor, sigma) {
+
+    for (var i = 0; i < this.mat.height; i++) {
+        for (var j = 0; j < this.mat.width; j++) {
+            this.mat.data[i * this.mat.width + j] = parseInt(this.mat.data[i * this.mat.width + j] * factor + sigma);
+
+            if (this.mat.data[i * this.mat.width + j] < 0) {
+                this.mat.data[i * this.mat.width + j] = 0;
+            } else if (this.mat.data[i * this.mat.width + j] > 255) {
+                this.mat.data[i * this.mat.width + j] = 256;
+            }
+        }
+    }
+
+    return this.mat;
+};
+
 module.exports = function (mat) {
     var contrast = new CpContrast(mat);
     return contrast;
