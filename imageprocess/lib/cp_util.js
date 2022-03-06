@@ -53,8 +53,8 @@ CpUtil.prototype.gray = function (mat) {
     if (mat.channel == 4) {
         var temp = new Uint8Array(mat.width * mat.height);
         for (var i = 0; i < mat.height; i++) {
-            for (var j = 0; j < mat.width * mat.channel; j += mat.channel) {
-                temp[i * mat.width / mat.channel + j] = parseInt((mat.data[i * mat.height * mat.channel + j] + mat.data[i * mat.height * mat.channel + j + 1] + mat.data[i * mat.height * mat.channel + j + 2]) / 3);
+            for (var j = 0; j < mat.width * mat.channel; j += 4) {
+                temp[i * mat.width + j / 4] = parseInt((mat.data[i * mat.width * mat.channel + j] + mat.data[i * mat.width * mat.channel + j + 1] + mat.data[i * mat.width * mat.channel + j + 2]) / 3);
             }
         }
         return {
