@@ -187,6 +187,11 @@ CPDetect.prototype.detect = function (detectParam) {
     console.log("sharpness: " + sharpness);
 
     //log.mat.print(resizeMat);
+
+    return {
+        detectedMat: detectedMat,
+        detectResult: this.detectResult
+    };
 };
 
 
