@@ -46,7 +46,6 @@ CPDetect.prototype.checkDetectState = function () {
 };
 
 CPDetect.prototype.postProcess = function (mat, detectedRect) {
-
     console.log('postProcess: ', detectedRect);
     var cropWidth = parseInt(640 * (detectedRect.right - detectedRect.left) / 432);
     var cropHeight = cropWidth;
@@ -55,11 +54,17 @@ CPDetect.prototype.postProcess = function (mat, detectedRect) {
     var cropY = parseInt((detectedRect.top - (cropHeight - (detectedRect.bottom - detectedRect.top)) / 2));
 
 
+    console.log(cropX + '-' + cropY + '  //  ' + cropWidth + '-' + cropHeight);
     // resize
-    //cropX = parseInt(cropX / this.resize_factor);
-    //cropY = parseInt(cropY / this.resize_factor);
-    //cropWidth = parseInt(cropWidth / this.resize_factor);
-    //cropHeight = parseInt(cropHeight / this.resize_factor);
+    cropX = parseInt(cropX / this.resize_factor);
+    cropY = parseInt(cropY / this.resize_factor);
+    cropWidth = parseInt(cropWidth / this.resize_factor);
+    cropHeight = parseInt(cropHeight / this.resize_factor);
+
+    // crop_factor
+    cropX += parseInt(this.mat.width * (1 - this.crop_factor) / 2);
+    cropY += parseInt(this.mat.height * (1 - this.crop_factor) / 2);
+
     var cropRect = {
         x: cropX,
         y: cropY,
@@ -67,8 +72,8 @@ CPDetect.prototype.postProcess = function (mat, detectedRect) {
         height: cropHeight
     }
     // crop with border
-    console.log(cropRect);
-    var cropMat = imageProcess.crop(mat).cropRect(cropRect);
+    console.log('resize factor', cropRect);
+    var cropMat = imageProcess.crop(this.mat).cropRect(cropRect);
     bmp.writer('./detect_output/detect_post_crop.bmp', cropMat);
 
 
