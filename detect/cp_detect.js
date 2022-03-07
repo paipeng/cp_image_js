@@ -1,6 +1,9 @@
 
 var log = require("../log/cp_log");
 var bmp = require("../bmp/cp_bmp");
+var jpeg = require('jpeg-js');
+var fs = require("fs");
+
 var imageProcess = require("../imageprocess/cp_imageprocess");
 const { crop } = require("../imageprocess/cp_imageprocess");
 
@@ -174,8 +177,11 @@ CPDetect.prototype.detect = function (detectParam) {
     bmp.writer('./detect_output/6_2_detect_contour_points_draw_rectangle.bmp', drawShapeMat);
     // get avg rectangle shape
     var avgRectangle = imageProcess.contour(binaryMat).getAvgShape(points);
-    var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 60);
+    var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 255);
     bmp.writer('./detect_output/6_3_detect_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
+
+    var jpegImageData = jpeg.encode(imageProcess.util().color(drawShapeMat), 50);
+    fs.writeFileSync('./detect_output/6_3_detect_contour_points_draw_avg_rectangle.jpeg', jpegImageData.data);
 
     avgRectangle = rectangle;
     this.detectResult.x1 = parseInt(avgRectangle.left / this.resize_factor);
