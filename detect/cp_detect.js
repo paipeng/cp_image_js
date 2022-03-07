@@ -140,7 +140,7 @@ CPDetect.prototype.detect = function (detectParam) {
     bmp.writer('./detect_output/4_2_detect_contrast.bmp', contrastMat);
 
     // 5. binary
-    var binaryMat = imageProcess.util().binary(contrastMat, mean * 0.8);
+    var binaryMat = imageProcess.util().binary(contrastMat, mean * 0.9);
     bmp.writer('./detect_output/5_detect_binary.bmp', binaryMat);
 
     // 5.1 erosion
