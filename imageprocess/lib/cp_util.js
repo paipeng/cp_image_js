@@ -161,6 +161,29 @@ CpUtil.prototype.gray = function (mat) {
     }
 };
 
+
+CpUtil.prototype.color = function (mat) {
+    if (mat.channel == 1) {
+        var temp = new Uint8Array(mat.width * mat.height * 4);
+        for (var i = 0; i < mat.height; i++) {
+            for (var j = 0; j < mat.width * mat.channel; j++) {
+                temp[i * mat.width * 4 + j * 4] = mat.data[i * mat.width * mat.channel + j];
+                temp[i * mat.width * 4 + j * 4 + 1] = mat.data[i * mat.width * mat.channel + j];
+                temp[i * mat.width * 4 + j * 4 + 2] = mat.data[i * mat.width * mat.channel + j];
+                temp[i * mat.width * 4 + j * 4 + 3] = 255;
+            }
+        }
+        return {
+            width: mat.width,
+            height: mat.height,
+            channel: 4,
+            data: temp
+        };
+    } else {
+        return mat;
+    }
+};
+
 module.exports = function () {
     var util = new CpUtil();
     return util;
