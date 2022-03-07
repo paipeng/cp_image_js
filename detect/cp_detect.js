@@ -152,15 +152,19 @@ CPDetect.prototype.detect = function (detectParam) {
     //bmp.writer('./detect_output/detect_dilate.bmp', dilateMat);
 
     // 5.3 labeling
-    var labelMat = imageProcess.label(erosionMat).label({ x: binaryMat.width / 2, y: binaryMat.height / 2 });
+    // get black point near the center point!!
+    var blackPoint = imageProcess.util().getCenterPoint(erosionMat);
+    console.log('blackPoint: ', blackPoint);
+
+    var labelMat = imageProcess.label(erosionMat).label(blackPoint);
     bmp.writer('./detect_output/5_2_detect_label.bmp', labelMat);
 
-    var invertMat = imageProcess.util().invert(labelMat);
+    //var invertMat = imageProcess.util().invert(labelMat);
     //log.mat.print(invertMat);
-    bmp.writer('./detect_output/5_3_detect_invert.bmp', invertMat);
+    //bmp.writer('./detect_output/5_3_detect_invert.bmp', invertMat);
 
     // 6. find contour
-    var points = imageProcess.contour(invertMat).findContour();
+    var points = imageProcess.contour(labelMat).findContour();
     var drawMat = imageProcess.draw(binaryMat).drawPoints(points, 0);
     bmp.writer('./detect_output/6_1_detect_contour_points_draw.bmp', drawMat);
 
