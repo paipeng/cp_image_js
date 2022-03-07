@@ -15,7 +15,19 @@ imageFile = './output/06b1be8c-0ef5-4cc7-8817-478cf2f67b75.bmp';
 
 //var mat = bmp.reader(imageFile);
 
-var jpegData = fs.readFileSync('/Users/paipeng/Downloads/ead2a878-9c6d-4429-8ea4-d34b4fa301c5.jpeg');
+imageFile = '/Users/paipeng/Downloads/ead2a878-9c6d-4429-8ea4-d34b4fa301c5.jpeg'; // OK
+imageFile = '/Users/paipeng/Downloads/0f39aea2-2b2e-424a-ba50-20e437a4240c.jpeg'; // OK
+imageFile = '/Users/paipeng/Downloads/989ba123-3fc0-4e86-b406-896e6182e3d6.jpeg'; // OK
+imageFile = '/Users/paipeng/Downloads/a2ceef2e-e2b9-456c-bad8-e62f029532ba.jpeg'; // OK
+
+imageFile = '/Users/paipeng/Downloads/51832a39-edc1-4114-b767-ecd940858dca.jpeg'; // error
+imageFile = '/Users/paipeng/Downloads/e3096336-cda4-4fdf-a9fa-4eb7bd9ff10c.jpeg'; // error crop -> 0.4
+imageFile = '/Users/paipeng/Downloads/d47005e3-d3a2-4c9e-a897-a84d597a9fc0.jpeg'; // error
+
+
+
+var jpegData = fs.readFileSync(imageFile);
+
 var mat = jpeg.decode(jpegData);
 mat.channel = mat.data.length / (mat.width * mat.height);
 //console.log(mat);
