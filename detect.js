@@ -25,6 +25,8 @@ var result = cpDetect(mat).detect({
     crop_factor: 0.8,
     resize_width: 640,
     resize_height: 640,
+    code_width: 432,
+    code_height: 360,
     min_sharpness: 20
 });
 

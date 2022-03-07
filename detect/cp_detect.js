@@ -57,7 +57,7 @@ CPDetect.prototype.checkDetectState = function () {
 
 CPDetect.prototype.postProcess = function (detectedRect) {
     console.log('postProcess: ', detectedRect);
-    var cropWidth = parseInt(640 * (detectedRect.right - detectedRect.left) / 432);
+    var cropWidth = parseInt(640 * (detectedRect.right - detectedRect.left) / this.detectParam.code_width);
     var cropHeight = cropWidth;
 
     var cropX = parseInt((detectedRect.left - (cropWidth - (detectedRect.right - detectedRect.left)) / 2));
@@ -190,8 +190,8 @@ CPDetect.prototype.detect = function (detectParam) {
     } else {
 
         // check sharpness
-        var c_width = parseInt(432 * 0.9);
-        var c_height = parseInt(360 * 0.9);
+        var c_width = parseInt(this.detectParam.code_width * 0.9);
+        var c_height = parseInt(this.detectParam.code_height * 0.9);
 
         cropRect = {
             top: parseInt((detectedMat.height - c_height) / 2),
