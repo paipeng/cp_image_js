@@ -166,7 +166,7 @@ CPDetect.prototype.detect = function (detectParam) {
 
     var rectangle = imageProcess.contour(binaryMat).getShape(points);
     // get max rectangle shape
-    var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawMat, rectangle, 120);
+    var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(resizeMat, rectangle, 120);
     bmp.writer('./detect_output/6_2_detect_contour_points_draw_rectangle.bmp', drawShapeMat);
     // get avg rectangle shape
     var avgRectangle = imageProcess.contour(binaryMat).getAvgShape(points);
