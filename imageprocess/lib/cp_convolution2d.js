@@ -3,7 +3,7 @@ function CpConvolution2d(mat) {
 }
 
 CpConvolution2d.prototype.filter = function (rect, kernel_size) {
-    let outputArrayData = new Uint8Array((rect.right - rect.left) * (rect.bottom - rect.top)).fill(0);
+    let outputArrayData = new Float32Array((rect.right - rect.left) * (rect.bottom - rect.top)).fill(0);
     //console.log(this.mat);
     let i = 0, j = 0;
     let m, n;
@@ -33,7 +33,7 @@ CpConvolution2d.prototype.filter = function (rect, kernel_size) {
 
             //console.log(tmp);
             //dst -> mtrx[i - y][j - x] = tmp;
-            outputArrayData[(i - rect.top) * (rect.right - rect.left) + (j - rect.left)] = parseInt(tmp);
+            outputArrayData[(i - rect.top) * (rect.right - rect.left) + (j - rect.left)] = Math.abs(tmp);
         }
     }
 
