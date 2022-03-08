@@ -64,13 +64,21 @@ CPDetect.prototype.checkDetectState = function () {
 
 CPDetect.prototype.detectSize = function (mat, rect) {
     console.log('detectSize: ', rect);
+    if (rect == null) {
+        rect = {
+            top: 0,
+            left: 0,
+            right: mat.width,
+            bottom: mat.height
+        };
+    }
     let max_mean = 0;
     let idx = 0;
-    for (let i = 1; i <= 20; i++) {
-        let output = imageProcess.convolution2d(mat).filter(rect, i + 3);
+    for (let i = 3; i <= 20; i++) {
+        let output = imageProcess.convolution2d(mat).filter(rect, i);
         //console.log(output);
         let mean = imageProcess.util().mean(output);//this.mean_matrix(output, SIZE, SIZE);
-        console.log('mean: ', mean);
+        console.log('mean: ', mean, ' idx: ', i);
         if (max_mean < mean) {
             max_mean = mean;
             idx = i;
@@ -265,6 +273,11 @@ CPDetect.prototype.detect = function (detectParam) {
         });
         bmp.writer('./detect_output/7_1_detected_mat_crop.bmp', cropMat);
         console.log("sharpness: " + this.detectResult.sharpness);
+
+        this.detectResult.symbolSize = this.detectSize(cropMat, null);
+        console.log("symbolSize: ", this.detectResult.symbolSize);
+
+
 
         if (this.detectResult.sharpness < this.detectParam.min_sharpness) {
             this.detect_state = 7;
