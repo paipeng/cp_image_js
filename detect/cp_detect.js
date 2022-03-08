@@ -97,13 +97,17 @@ CPDetect.prototype.postProcess = function (detectedRect) {
 };
 
 
+CPDetect.prototype.validateLabel = function (rectangle) {
+    var ratio = (rectangle.right - rectangle.left) / (rectangle.bottom - rectangle.top);
+    console.log('validateLabel: ', ratio);
+    return (ratio > 1.08 && ratio < 1.35);
+};
+
+
 CPDetect.prototype.detect = function (detectParam) {
     this.detectParam = detectParam;
     console.log('detect: ', detectParam);
     console.log('mat size: ' + this.mat.width + '-' + this.mat.height);
-
-
-
 
     // 1. crop
     var cropRect = this.getCropRect(detectParam.crop_factor);
@@ -156,34 +160,42 @@ CPDetect.prototype.detect = function (detectParam) {
 
     // 5.3 labeling
     // get black point near the center point!!
-    var blackPoint = imageProcess.util().getCenterPoint(erosionMat);
-    console.log('blackPoint: ', blackPoint);
 
-    var labelMat = imageProcess.label(erosionMat).label(blackPoint);
-    bmp.writer('./detect_output/5_2_detect_label.bmp', labelMat);
+    // validate labeling
+    var label_index = 100;
+    do {
+        var blackPoint = imageProcess.util().getCenterPoint(erosionMat);
+        console.log('blackPoint: ', blackPoint);
+        console.log(label_index);
 
-    //var invertMat = imageProcess.util().invert(labelMat);
-    //log.mat.print(invertMat);
-    //bmp.writer('./detect_output/5_3_detect_invert.bmp', invertMat);
+        var labelMat = imageProcess.label(erosionMat).label(blackPoint, label_index += 10);
+        bmp.writer('./detect_output/5_2_detect_label.bmp', labelMat);
 
-    // 6. find contour
-    var points = imageProcess.contour(labelMat).findContour();
-    var drawMat = imageProcess.draw(binaryMat).drawPoints(points, 0);
-    bmp.writer('./detect_output/6_1_detect_contour_points_draw.bmp', drawMat);
+        // 6. find contour
+        var points = imageProcess.contour(labelMat).findContour();
+        var drawMat = imageProcess.draw(binaryMat).drawPoints(points, 0);
+        bmp.writer('./detect_output/6_1_detect_contour_points_draw.bmp', drawMat);
 
-    var rectangle = imageProcess.contour(binaryMat).getShape(points);
-    // get max rectangle shape
-    var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(resizeMat, rectangle, 120);
-    bmp.writer('./detect_output/6_2_detect_contour_points_draw_rectangle.bmp', drawShapeMat);
-    // get avg rectangle shape
-    var avgRectangle = imageProcess.contour(binaryMat).getAvgShape(points);
-    var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 255);
-    bmp.writer('./detect_output/6_3_detect_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
+        var rectangle = imageProcess.contour(binaryMat).getShape(points);
+        // get max rectangle shape
+        var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(resizeMat, rectangle, 120);
+        bmp.writer('./detect_output/6_2_detect_contour_points_draw_rectangle.bmp', drawShapeMat);
+        // get avg rectangle shape
+        var avgRectangle = imageProcess.contour(binaryMat).getAvgShape(points);
+        var drawShapeMat = imageProcess.draw(drawMat).drawRectangleOnMat(drawShapeMat, avgRectangle, 255);
+        bmp.writer('./detect_output/6_3_detect_contour_points_draw_avg_rectangle.bmp', drawShapeMat);
 
-    var jpegImageData = jpeg.encode(imageProcess.util().color(drawShapeMat), 50);
-    fs.writeFileSync('./detect_output/6_3_detect_contour_points_draw_avg_rectangle.jpeg', jpegImageData.data);
+        var jpegImageData = jpeg.encode(imageProcess.util().color(drawShapeMat), 50);
+        fs.writeFileSync('./detect_output/6_3_detect_contour_points_draw_avg_rectangle.jpeg', jpegImageData.data);
 
-    avgRectangle = rectangle;
+        avgRectangle = rectangle;
+        if (this.validateLabel(avgRectangle)) {
+            break;
+        }
+    } while (label_index <= 200);
+    console.log('validated', label_index);
+    bmp.writer('./detect_output/6_4_detect_after_label.bmp', erosionMat);
+
     this.detectResult.x1 = parseInt(avgRectangle.left / this.resize_factor);
     this.detectResult.y1 = parseInt(avgRectangle.top / this.resize_factor);
     this.detectResult.x2 = parseInt(avgRectangle.right / this.resize_factor);

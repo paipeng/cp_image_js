@@ -2,10 +2,15 @@ function CPLabel(mat) {
     this.mat = mat;
 }
 
-CPLabel.prototype.hasConnectedLabel = function (labelData, width, x, y) {
+CPLabel.prototype.hasConnectedLabel = function (labelData, width, x, y, label_index) {
     var min = 0;
     if (labelData[x - 1 + y * width] == 0 || labelData[x - 1 + (y - 1) * width] == 0 || labelData[x + (y - 1) * width] == 0 || labelData[x + 1 + (y - 1) * width] == 0 ||
         labelData[x + 1 + y * width] == 0 || labelData[x + 1 + (y + 1) * width] == 0 || labelData[x + (y + 1) * width] == 0 || labelData[x - 1 + (y + 1) * width] == 0
+    ) {
+
+        min = 255;
+    } else if (labelData[x - 1 + y * width] == label_index || labelData[x - 1 + (y - 1) * width] == label_index || labelData[x + (y - 1) * width] == label_index || labelData[x + 1 + (y - 1) * width] == label_index ||
+        labelData[x + 1 + y * width] == label_index || labelData[x + 1 + (y + 1) * width] == label_index || labelData[x + (y + 1) * width] == label_index || labelData[x - 1 + (y + 1) * width] == label_index
     ) {
 
         min = 255;
@@ -14,7 +19,7 @@ CPLabel.prototype.hasConnectedLabel = function (labelData, width, x, y) {
 
 }
 
-CPLabel.prototype.label = function (startPoint) {
+CPLabel.prototype.label = function (startPoint, label_index) {
     console.log('label', startPoint);
     var labelData = new Uint8Array(this.mat.width * this.mat.height);
     for (var i = 0; i < this.mat.width * this.mat.height; i++) {
@@ -27,10 +32,11 @@ CPLabel.prototype.label = function (startPoint) {
     // right-bottom
     for (var i = startPoint.y; i < this.mat.height - 1; i++) {
         for (var j = startPoint.x; j < this.mat.width - 1; j++) {
-            if (this.mat.data[i * this.mat.width + j] == 0 && this.hasConnectedLabel(labelData, this.mat.width, j, i) > 0) {
+            if (this.mat.data[i * this.mat.width + j] == 0 && this.hasConnectedLabel(labelData, this.mat.width, j, i, label_index) > 0) {
                 var newPoint = { x: j, y: i };
                 labelData[i * this.mat.width + j] = 0;
                 points.push(newPoint);
+                this.mat.data[i * this.mat.width + j] = label_index;
             } else {
                 //console.log(this.mat.data[i * this.mat.width + j]);
             }
@@ -40,10 +46,11 @@ CPLabel.prototype.label = function (startPoint) {
     // right-top
     for (var i = startPoint.y; i >= 1; i--) {
         for (var j = startPoint.x; j < this.mat.width - 1; j++) {
-            if (this.mat.data[i * this.mat.width + j] == 0 && this.hasConnectedLabel(labelData, this.mat.width, j, i) > 0) {
+            if (this.mat.data[i * this.mat.width + j] == 0 && this.hasConnectedLabel(labelData, this.mat.width, j, i, label_index) > 0) {
                 var newPoint = { x: j, y: i };
                 labelData[i * this.mat.width + j] = 0;
                 points.push(newPoint);
+                this.mat.data[i * this.mat.width + j] = label_index;
             } else {
                 //console.log(this.mat.data[i * this.mat.width + j]);
             }
@@ -53,10 +60,11 @@ CPLabel.prototype.label = function (startPoint) {
     // left-top
     for (var i = startPoint.y; i >= 1; i--) {
         for (var j = startPoint.x; j > 1; j--) {
-            if (this.mat.data[i * this.mat.width + j] == 0 && this.hasConnectedLabel(labelData, this.mat.width, j, i) > 0) {
+            if (this.mat.data[i * this.mat.width + j] == 0 && this.hasConnectedLabel(labelData, this.mat.width, j, i, label_index) > 0) {
                 var newPoint = { x: j, y: i };
                 labelData[i * this.mat.width + j] = 0;
                 points.push(newPoint);
+                this.mat.data[i * this.mat.width + j] = 255;
             } else {
                 //console.log(this.mat.data[i * this.mat.width + j]);
             }
@@ -66,10 +74,11 @@ CPLabel.prototype.label = function (startPoint) {
     // left-bottom
     for (var i = startPoint.y; i < this.mat.height - 1; i++) {
         for (var j = startPoint.x; j > 1; j--) {
-            if (this.mat.data[i * this.mat.width + j] == 0 && this.hasConnectedLabel(labelData, this.mat.width, j, i) > 0) {
+            if (this.mat.data[i * this.mat.width + j] == 0 && this.hasConnectedLabel(labelData, this.mat.width, j, i, label_index) > 0) {
                 var newPoint = { x: j, y: i };
                 labelData[i * this.mat.width + j] = 0;
                 points.push(newPoint);
+                this.mat.data[i * this.mat.width + j] = label_index;
             } else {
                 //console.log(this.mat.data[i * this.mat.width + j]);
             }
