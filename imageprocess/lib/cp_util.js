@@ -50,7 +50,7 @@ CpUtil.prototype.getCenterPoint = function (mat) {
     var mean;
     var count;
 
-    console.log(mat);
+    //console.log(mat);
 
     var min_side = mat.width > mat.height ? mat.height : mat.width;
 
@@ -66,12 +66,12 @@ CpUtil.prototype.getCenterPoint = function (mat) {
         };
         current_point.x -= i + 1;
         current_point.y += i + 1;
-        console.log(current_point);
+        //console.log(current_point);
 
         // left
         for (var j = 1; j < (i + 1) * 2 + 1; j++) {
             current_point.y--;
-            console.log('pl: ', current_point, mat.data[current_point.y * mat.width + current_point.x]);
+            //console.log('pl: ', current_point, mat.data[current_point.y * mat.width + current_point.x]);
             if (mat.data[current_point.y * mat.width + current_point.x] == 0) {
                 return current_point;
             }
