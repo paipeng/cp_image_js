@@ -27,7 +27,9 @@ function CPDetect(mat) {
         x1: 0,
         x2: 0,
         y1: 0,
-        y2: 0
+        y2: 0,
+        sharpness: 0,
+        meanIntensitive: 0
     };
     this.detect_state = 0;
 }
@@ -222,6 +224,10 @@ CPDetect.prototype.detect = function (detectParam) {
             bottom: parseInt((detectedMat.height - c_height) / 2) + c_height
         }
         this.detectResult.sharpness = imageProcess.sharpness(detectedMat).sharpness(cropRect);
+
+        this.detectResult.meanIntensitive = imageProcess.sharpness(detectedMat).meanIntensitive(cropRect);
+        console.log("meanIntensitive: ", this.detectResult.meanIntensitive);
+
         var cropMat = imageProcess.crop(detectedMat).cropRect({
             x: cropRect.left,
             y: cropRect.top,

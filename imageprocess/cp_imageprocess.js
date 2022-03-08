@@ -11,6 +11,7 @@ var sharpness = require('./lib/cp_sharpness');
 var dilate = require('./lib/cp_dilate');
 var erosion = require('./lib/cp_erosion');
 var label = require('./lib/cp_label');
+var histogram = require('./lib/cp_histogram');
 
 
 function CPIP() {

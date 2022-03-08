@@ -1,4 +1,6 @@
 
+var histogram = require('./cp_histogram');
+
 function CPSharpness(mat) {
     this.mat = mat;
 }
@@ -26,6 +28,57 @@ CPSharpness.prototype.sharpness = function (rect) {
     }
     return out / ((rect.right - rect.left) * (rect.bottom - rect.top));
 
+};
+
+CPSharpness.prototype.meanIntensitive = function (rect) {
+    let sum_total = (rect.right - rect.left) * (rect.bottom - rect.top);
+    let cumul_histogram = new Array(256).fill(0);
+    let sum_elems = 0;
+    let idx_lo = 0;
+    let idx_hi = 0;
+    let i_level;
+    let mean_intensity;
+
+    const LEVEL_BLACK = 0.25;
+    const LEVEL_WHITE = 0.75;
+    const MINDIST_BLACKWHITE = 20; //TODO 原值40  
+
+    var hist = histogram(this.mat).histogramInRect(rect);
+
+    for (let i = 0; i < cumul_histogram.length; i++) {
+        sum_elems = 0;
+        for (let j = 0; j <= i; j++) {
+            sum_elems += hist[j];
+        }
+        cumul_histogram[i] = sum_elems / sum_total;
+    }
+
+    for (let i = 0; i < cumul_histogram.length; i++) {
+        if (cumul_histogram[i] > LEVEL_BLACK && idx_lo == 0)
+            idx_lo = i;
+        if (cumul_histogram[i] > LEVEL_WHITE && idx_hi == 0)
+            idx_hi = i;
+    }
+
+    i_level = (idx_hi - idx_lo); // output 1
+    mean_intensity = (idx_hi + idx_lo) / 2;
+    if (i_level > MINDIST_BLACKWHITE) {
+        return {
+            'success': true,
+            'i_level': i_level,
+            'mean_intensity': mean_intensity,
+            'idx_hi': idx_hi,
+            'idx_lo': idx_lo
+        };
+    } else {
+        return {
+            'success': false,
+            'i_level': i_level,
+            'mean_intensity': mean_intensity,
+            'idx_hi': idx_hi,
+            'idx_lo': idx_lo
+        };
+    }
 };
 
 module.exports = function (mat) {
