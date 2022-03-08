@@ -7,6 +7,25 @@ var fs = require("fs");
 var imageProcess = require("../imageprocess/cp_imageprocess");
 const { crop } = require("../imageprocess/cp_imageprocess");
 
+const DetectState = {
+    ENUM_OCV_DETECT_STATE_NOEXIST: 0, //不存在S2i码
+    DETECT_STATE_DPI2000: 1,
+    DETECT_STATE_DPI800: 2,
+    ENUM_OCV_DETECT_STATE_EXIST: 3, //存在S2i码
+    ENUM_DETECT_SIZE_TOO_BIG: 4,
+    ENUM_DETECT_SIZE_TOO_SMALL: 5,
+    ENUM_DETECT_SIZE_UNDEFINED: 6,
+    ENUM_DETECT_UNSHARP: 7, // 找到合适的尺寸区域，但是图片不清晰,
+    ENUM_DETECT_REFLECTION: 8,
+    ENUM_DETECT_S2I_SUCCESS: 9,
+    ENUM_DETECT_S2I_SUCCESS_TO_RESIZE: 10,
+    ENUM_DETECT_S2I_TOO_DARK: 11,
+    ENUM_DETECT_S2I_TOO_BRIGHT: 12,
+    ENUM_DETECT_SHARP: 13,
+    ENUM_DETECT_ROTATE: 14,
+    ENUM_DETECT_MOTION_BLUR: 15 //动态模糊
+};
+
 function CPDetect(mat) {
     this.mat = mat;
 
@@ -88,9 +107,13 @@ CPDetect.prototype.detectSize = function (mat, rect) {
     if (max_mean < 10) {
         idx = -1;
     }
+
+    var valid_size = (idx > 7 && idx < 20);
+
     return {
         max_mean_index: idx,
-        max_mean_value: max_mean
+        max_mean_value: max_mean,
+        valid_size: valid_size
     };
 };
 
@@ -133,10 +156,29 @@ CPDetect.prototype.postProcess = function (detectedRect) {
 };
 
 
-CPDetect.prototype.validateLabel = function (rectangle) {
+CPDetect.prototype.validateLabel = function (mat, rectangle) {
     var ratio = (rectangle.right - rectangle.left) / (rectangle.bottom - rectangle.top);
     console.log('validateLabel: ', ratio);
-    return (ratio > 1.08 && ratio < 1.35);
+    if (ratio > 1.08 && ratio < 1.35) {
+
+        // check sharpness
+        var sharpness = imageProcess.sharpness(mat).sharpness(rectangle);
+        //check size
+        console.log('sharpness: ', sharpness);
+        if (sharpness >= 20) {
+            // check size
+            // resize -> 
+
+            var symbolSize = this.detectSize(mat, rectangle);
+            console.log("symbolSize: ", symbolSize);
+            return symbolSize.valid_size;
+
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
 };
 
 
@@ -225,7 +267,7 @@ CPDetect.prototype.detect = function (detectParam) {
         fs.writeFileSync('./detect_output/6_3_detect_contour_points_draw_avg_rectangle.jpeg', jpegImageData.data);
 
         avgRectangle = rectangle;
-        if (this.validateLabel(avgRectangle)) {
+        if (this.validateLabel(resizeMat, avgRectangle)) {
             break;
         }
     } while (label_index <= 200);
