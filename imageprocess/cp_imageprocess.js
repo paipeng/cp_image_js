@@ -12,6 +12,7 @@ var dilate = require('./lib/cp_dilate');
 var erosion = require('./lib/cp_erosion');
 var label = require('./lib/cp_label');
 var histogram = require('./lib/cp_histogram');
+var convolution2d = require('./lib/cp_convolution2d');
 
 
 function CPIP() {
@@ -58,5 +59,7 @@ module.exports = {
     dilate: dilate,
     erosion: erosion,
     label: label,
+    histogram: histogram,
+    convolution2d: convolution2d,
     process: new CPIP()
 };

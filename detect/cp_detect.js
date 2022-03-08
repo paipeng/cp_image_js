@@ -60,6 +60,32 @@ CPDetect.prototype.checkDetectState = function () {
 
 };
 
+
+
+CPDetect.prototype.detectSize = function (mat, rect) {
+    console.log('detectSize: ', rect);
+    let max_mean = 0;
+    let idx = 0;
+    for (let i = 1; i <= 20; i++) {
+        let output = imageProcess.convolution2d(mat).filter(rect, i + 3);
+        //console.log(output);
+        let mean = imageProcess.util().mean(output);//this.mean_matrix(output, SIZE, SIZE);
+        console.log('mean: ', mean);
+        if (max_mean < mean) {
+            max_mean = mean;
+            idx = i;
+        }
+    }
+
+    if (max_mean < 10) {
+        idx = -1;
+    }
+    return {
+        max_mean_index: idx,
+        max_mean_value: max_mean
+    };
+};
+
 CPDetect.prototype.postProcess = function (detectedRect) {
     console.log('postProcess: ', detectedRect);
     var cropWidth = parseInt(640 * (detectedRect.right - detectedRect.left) / this.detectParam.code_width);
@@ -227,6 +253,9 @@ CPDetect.prototype.detect = function (detectParam) {
 
         this.detectResult.meanIntensitive = imageProcess.sharpness(detectedMat).meanIntensitive(cropRect);
         console.log("meanIntensitive: ", this.detectResult.meanIntensitive);
+
+        this.detectResult.symbolSize = this.detectSize(detectedMat, cropRect);
+        console.log("symbolSize: ", this.detectResult.symbolSize);
 
         var cropMat = imageProcess.crop(detectedMat).cropRect({
             x: cropRect.left,
