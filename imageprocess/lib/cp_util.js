@@ -136,7 +136,7 @@ CpUtil.prototype.mean = function (mat) {
             sum += mat.data[i * mat.width * mat.channel + j];
         }
     }
-    console.log(sum);
+    //console.log(sum);
     return sum / (mat.width * mat.height);
 };
 
