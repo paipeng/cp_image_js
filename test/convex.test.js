@@ -48,6 +48,23 @@ test('string with a addition of two number', () => {
     hullPoints_size = cp_image.imageprocess.convexHull().hull(points, points.length, hullPoints);
 
     console.log(hullPoints);
+
+
+    var cpUtil = new cp_image.CPUtil();
+    var maxX = cpUtil.getMaxX(points);
+
+    var maxY = cpUtil.getMaxY(points);
+    console.log('maxX', maxX, maxY);
+    var mat = cp_image.matUtil.createMat(maxX + 20, maxY + 20, 1);
+
+    var cpDraw = new cp_image.CPDraw();
+    cpDraw.drawPoints(mat, points, 0);
+    cpDraw.drawPolygon(mat, points, 0);
+
+    cp_image.matUtil.writeBmpMat('./output/convex_1.bmp', mat);
+
+
+
 });
 
 
