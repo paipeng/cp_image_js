@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,8 +24,10 @@
   },
   "homepage": "https://github.com/paipeng/cp_image_js#readme",
   "dependencies": {
-    "fs": "0.0.1-security",
-    "jpeg-js": "^0.4.3",
-    "npmlog": "^6.0.1"
+    "base64-js": "^1.5.1",
+    "jpeg-js": "^0.4.3"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1"
   }
 }

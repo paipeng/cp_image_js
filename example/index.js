@@ -1,8 +1,8 @@
 //var bmp = require("bmp-js");
 
-var log = require("./log/cp_log");
-var bmp = require("./bmp/cp_bmp");
-var imageProcess = require("./imageprocess/cp_imageprocess");
+var log = require("../lib/log/cp_log");
+var bmp = require("../lib/bmp/cp_bmp");
+var imageProcess = require("../lib/imageprocess/cp_imageprocess");
 
 //var bmpBuffer = fs.readFileSync();
 
