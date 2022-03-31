@@ -1,13 +1,12 @@
-const imageprocess = require('../lib/imageprocess/cp_imageprocess')
-const { matUtil } = require("../lib/mat/cp_matutil");
+var cp_image = require("../index");
 
 var grayMat = null;
 beforeEach(() => {
     var imageFile = './images/qrcode.bmp';
     console.log('test image path: ' + imageFile);
 
-    var mat = matUtil.readMat(imageFile);
-    grayMat = imageprocess.util().gray(mat);
+    var mat = cp_image.matUtil.readMat(imageFile);
+    grayMat = cp_image.imageprocess.util().gray(mat);
 });
 
 afterEach(() => {
@@ -18,26 +17,26 @@ afterEach(() => {
 test('qrcode test', () => {
     // 2. resize
     var resize_factor = 0.2;
-    var resizeMat = imageprocess.resize(grayMat).resizeFactor(resize_factor);
-    matUtil.writeBmpMat('./output/detect_resize.bmp', resizeMat);
+    var resizeMat = cp_image.imageprocess.resize(grayMat).resizeFactor(resize_factor);
+    cp_image.matUtil.writeBmpMat('./output/detect_resize.bmp', resizeMat);
     // blur
-    var blurMat = imageprocess.filter(resizeMat).blur(5);
-    matUtil.writeBmpMat('./output/detect_blur.bmp', blurMat);
+    var blurMat = cp_image.imageprocess.filter(resizeMat).blur(5);
+    cp_image.matUtil.writeBmpMat('./output/detect_blur.bmp', blurMat);
 
     // 2.1 contrast
-    var contrastMat = imageprocess.contrast().improve3(blurMat, 12.1);
-    matUtil.writeBmpMat('./output/detect_contrast.bmp', contrastMat);
+    var contrastMat = cp_image.imageprocess.contrast().improve3(blurMat, 12.1);
+    cp_image.matUtil.writeBmpMat('./output/detect_contrast.bmp', contrastMat);
 
     // mean
-    var mean = imageprocess.util().mean(resizeMat);
+    var mean = cp_image.imageprocess.util().mean(resizeMat);
     console.log('mean: ', mean)
 
-    var maxlike = imageprocess.threshold(resizeMat).maxlike();
+    var maxlike = cp_image.imageprocess.threshold(resizeMat).maxlike();
     console.log('maxlike: ', maxlike)
 
 
-    var binaryMat = imageprocess.util().binary(contrastMat, mean);
-    matUtil.writeBmpMat('./output/detect_binary.bmp', binaryMat);
+    var binaryMat = cp_image.imageprocess.util().binary(contrastMat, mean);
+    cp_image.matUtil.writeBmpMat('./output/detect_binary.bmp', binaryMat);
 
 
 

@@ -1,9 +1,5 @@
 
-
-var log = require("../lib/log/cp_log");
-const { matUtil } = require("../lib/mat/cp_matutil");
-const imageprocess = require('../lib/imageprocess/cp_imageprocess')
-
+var cp_image = require("../index");
 
 /*
 console.log(process.argv);
@@ -17,8 +13,8 @@ beforeEach(() => {
     var imageFile = './images/waffle.bmp';
     console.log('test image path: ' + imageFile);
 
-    var mat = matUtil.readMat(imageFile);
-    grayMat = imageprocess.util().gray(mat);
+    var mat = cp_image.matUtil.readMat(imageFile);
+    grayMat = cp_image.imageprocess.util().gray(mat);
 });
 
 afterEach(() => {
@@ -33,27 +29,27 @@ afterEach(() => {
 
 
 test('filter blur test', () => {
-    var blurMat = imageprocess.filter(grayMat).blur(5);
-    matUtil.writeBmpMat('./output/detect_blur.bmp', blurMat);
-    var mean = imageprocess.util().mean(blurMat);
+    var blurMat = cp_image.imageprocess.filter(grayMat).blur(5);
+    cp_image.matUtil.writeBmpMat('./output/detect_blur.bmp', blurMat);
+    var mean = cp_image.imageprocess.util().mean(blurMat);
     console.log('mean: ', mean)
     expect(parseInt(mean)).toBe(140);
-    var maxlike = imageprocess.threshold(blurMat).maxlike();
+    var maxlike = cp_image.imageprocess.threshold(blurMat).maxlike();
     console.log('maxlike: ', maxlike)
     expect(maxlike).toBe(174);
 });
 
 test('edge sobel test', () => {
-    var edgeMat = imageprocess.cpcanny(grayMat).gradient('sobel');
-    matUtil.writeBmpMat('./output/detect_edge_sobel.bmp', edgeMat);
+    var edgeMat = cp_image.imageprocess.cpcanny(grayMat).gradient('sobel');
+    cp_image.matUtil.writeBmpMat('./output/detect_edge_sobel.bmp', edgeMat);
 });
 
 test('edge roberts test', () => {
-    var edgeMat = imageprocess.cpcanny(grayMat).gradient('roberts');
-    matUtil.writeBmpMat('./output/detect_edge_roberts.bmp', edgeMat);
+    var edgeMat = cp_image.imageprocess.cpcanny(grayMat).gradient('roberts');
+    cp_image.matUtil.writeBmpMat('./output/detect_edge_roberts.bmp', edgeMat);
 });
 
 test('edge prewitt test', () => {
-    var edgeMat = imageprocess.cpcanny(grayMat).gradient('prewitt');
-    matUtil.writeBmpMat('./output/detect_edge_prewitt.bmp', edgeMat);
+    var edgeMat = cp_image.imageprocess.cpcanny(grayMat).gradient('prewitt');
+    cp_image.matUtil.writeBmpMat('./output/detect_edge_prewitt.bmp', edgeMat);
 });
