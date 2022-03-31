@@ -45,7 +45,7 @@ test('string with a addition of two number', () => {
     //          (2) Size of the points array
     //          (3) Empty array to store the hull points
     // Returns: The number of hull points, which may differ the the hull points array’s size
-    hullPoints_size = cp_image.imageprocess.convexHull().chainHull_2D(points, points.length, hullPoints);
+    hullPoints_size = cp_image.imageprocess.convexHull().hull(points, points.length, hullPoints);
 
     console.log(hullPoints);
 });
