@@ -1,7 +1,7 @@
 {
   "name": "cp_image_js",
-  "version": "1.0.0",
-  "description": "A Pure Javascript Version for image processing",
+  "version": "1.0.1",
+  "description": "A Pure Javascript Version for image processing:\n-filter,threshold,contour",
   "main": "index.js",
   "directories": {
     "test": "test"
