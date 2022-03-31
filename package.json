@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/paipeng/cp_image_js#readme",
   "dependencies": {
+    "base64-js": "^1.5.1",
     "jpeg-js": "^0.4.3"
   },
   "devDependencies": {
