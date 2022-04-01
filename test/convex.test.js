@@ -59,7 +59,7 @@ test('string with a addition of two number', () => {
 
     var cpDraw = new cp_image.CPDraw();
     cpDraw.drawPoints(mat, points, 0);
-    cpDraw.drawPolygon(mat, points, 0);
+    cpDraw.drawPolygon(mat, hullPoints, 0);
 
     cp_image.matUtil.writeBmpMat('./output/convex_1.bmp', mat);
 
