@@ -61,3 +61,31 @@ test('draw polygon in color', () => {
     matUtil.writeBmpMat('./output/draw_polygon_rgb.bmp', mat);
 
 });
+
+
+
+test('draw hull polygon in color', () => {
+
+    var hullPoints = [
+        { x: 33, y: 159 },
+        { x: 214, y: 49 },
+        { x: 442, y: 40 },
+        { x: 471, y: 187 },
+        { x: 433, y: 267 },
+        { x: 128, y: 261 },
+        { x: 120, y: 184 }
+    ];
+    var cpUtil = new CPUtil();
+    var maxX = cpUtil.getMaxX(hullPoints);
+    var maxY = cpUtil.getMaxY(hullPoints);
+    console.log('maxX', maxX, maxY);
+    var mat = matUtil.createMat(maxX + 20, maxY + 20, 3);
+
+    var cpDraw = new CPDraw();
+    //cpDraw.drawPoints(mat, points, 0);
+    cpDraw.drawPolygon(mat, hullPoints, 0x1FFF70);
+
+    matUtil.writeBmpMat('./output/draw_hull_polygon_rgb.bmp', mat);
+
+});
+
