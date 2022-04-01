@@ -1,6 +1,6 @@
 
 var cp_image = require("../index");
-
+var { CPLine, CPPoint, matUtil, CPUtil, CPDraw, CpConvexHull } = require("../index");
 
 var points = [
     { x: 207, y: 184 },
@@ -30,14 +30,12 @@ var points = [
     { x: 366, y: 122 }
 ]
 
-test('string with a addition of two number', () => {
-
-    var hullPoints = [];
-    var hullPoints_size;
+test('convex hull', () => {
+    var convexHull = new CpConvexHull();
     // Add a couple sample points to the array
     // Sort the points by X, then by Y (required by the algorithm)
-    points.sort(cp_image.imageprocess.convexHull().sortPointY);
-    points.sort(cp_image.imageprocess.convexHull().sortPointX);
+    points.sort(convexHull.sortPointY);
+    points.sort(convexHull.sortPointX);
 
     console.log(points);
     // Calculate the convex hull
@@ -45,9 +43,10 @@ test('string with a addition of two number', () => {
     //          (2) Size of the points array
     //          (3) Empty array to store the hull points
     // Returns: The number of hull points, which may differ the the hull points array’s size
-    hullPoints_size = cp_image.imageprocess.convexHull().hull(points, points.length, hullPoints);
 
-    console.log(hullPoints);
+    var hullPoints = convexHull.hull(points);
+
+    console.log('hullPoints', hullPoints);
 
 
     var cpUtil = new cp_image.CPUtil();
