@@ -9,6 +9,7 @@ var CPMat = require('./lib/mat/cp_mat');
 var CPRectangle = require('./lib/mat/cp_rectangle');
 var CpConvexHull = require('./lib/imageprocess/lib/cp_convex_hull');
 var CPCorrelation2d = require('./lib/imageprocess/lib/cp_correlation2d');
+var CPConvolution2d = require('./lib/imageprocess/lib/cp_convolution2d');
 module.exports = {
     imageprocess: imageprocess,
     matUtil: matUtil,
@@ -20,5 +21,6 @@ module.exports = {
     CPMat: CPMat,
     CPRectangle: CPRectangle,
     CpConvexHull: CpConvexHull,
-    CPCorrelation2d: CPCorrelation2d
+    CPCorrelation2d: CPCorrelation2d,
+    CPConvolution2d: CPConvolution2d
 };
