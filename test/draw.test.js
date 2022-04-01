@@ -44,7 +44,20 @@ test('draw polygon', () => {
 
     matUtil.writeBmpMat('./output/draw_polygon.bmp', mat);
 
-
-
 });
 
+
+test('draw polygon in color', () => {
+    var cpUtil = new CPUtil();
+    var maxX = cpUtil.getMaxX(points);
+    var maxY = cpUtil.getMaxY(points);
+    console.log('maxX', maxX, maxY);
+    var mat = matUtil.createMat(maxX + 20, maxY + 20, 3);
+
+    var cpDraw = new CPDraw();
+    //cpDraw.drawPoints(mat, points, 0);
+    cpDraw.drawPolygon(mat, points, 0xFF00FF);
+
+    matUtil.writeBmpMat('./output/draw_polygon_rgb.bmp', mat);
+
+});
