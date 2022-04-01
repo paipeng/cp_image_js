@@ -38,11 +38,6 @@ test('convex hull', () => {
     points.sort(convexHull.sortPointX);
 
     console.log(points);
-    // Calculate the convex hull
-    // Takes: an (1) array of points with x() and y() methods defined
-    //          (2) Size of the points array
-    //          (3) Empty array to store the hull points
-    // Returns: The number of hull points, which may differ the the hull points array’s size
 
     var hullPoints = convexHull.hull(points);
 
@@ -54,16 +49,13 @@ test('convex hull', () => {
 
     var maxY = cpUtil.getMaxY(points);
     console.log('maxX', maxX, maxY);
-    var mat = cp_image.matUtil.createMat(maxX + 20, maxY + 20, 1);
+    var mat = cp_image.matUtil.createMat(maxX + 20, maxY + 20, 3);
 
     var cpDraw = new cp_image.CPDraw();
     cpDraw.drawPoints(mat, points, 0);
-    cpDraw.drawPolygon(mat, hullPoints, 0);
+    cpDraw.drawPolygon(mat, hullPoints, 0x000000);
 
-    cp_image.matUtil.writeBmpMat('./output/convex_1.bmp', mat);
-
-
-
+    cp_image.matUtil.writeBmpMat('./output/convex_rgb.bmp', mat);
 });
 
 
