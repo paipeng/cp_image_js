@@ -5,6 +5,7 @@ var CPUtil = require('./lib/util/cp_util');
 var CPDraw = require('./lib/util/cp_draw');
 var CPPoint = require('./lib/mat/cp_point');
 var CPLine = require('./lib/mat/cp_line');
+var CpConvexHull = require('./lib/imageprocess/lib/cp_convex_hull');
 
 module.exports = {
     imageprocess: imageprocess,
@@ -13,5 +14,6 @@ module.exports = {
     CPUtil: CPUtil,
     CPDraw: CPDraw,
     CPPoint: CPPoint,
-    CPLine: CPLine
+    CPLine: CPLine,
+    CpConvexHull: CpConvexHull
 };
