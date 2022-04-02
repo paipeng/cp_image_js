@@ -14,6 +14,7 @@ var CPFlip = require('./lib/imageprocess/lib/cp_flip');
 
 var CPRotate = require('./lib/imageprocess/lib/cp_rotate');
 var CPHarrisCorner = require('./lib/imageprocess/lib/cp_harris_corner');
+var CPFFT = require('./lib/imageprocess/lib/cp_fft');
 module.exports = {
     imageprocess: imageprocess,
     matUtil: matUtil,
@@ -29,5 +30,6 @@ module.exports = {
     CPConvolution2d: CPConvolution2d,
     CPFlip: CPFlip,
     CPRotate: CPRotate,
-    CPHarrisCorner: CPHarrisCorner
+    CPHarrisCorner: CPHarrisCorner,
+    CPFFT: CPFFT
 };
