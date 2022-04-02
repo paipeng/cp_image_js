@@ -76,4 +76,8 @@ test.only('fft2', () => {
     complexs = fft.fft2(points);
     console.log(complexs)
 
+
+    complexs2 = fft.ifft2(complexs);
+
+    console.log(complexs2)
 });
