@@ -3,7 +3,7 @@ var { matUtil, imageprocess, CPUtil, CPDraw, CPHarrisCorner } = require("../inde
 
 var grayMat = null;
 beforeEach(() => {
-    var imageFile = './images/qrcode.bmp';
+    var imageFile = './images/find_contour.bmp';
     console.log('test image path: ' + imageFile);
 
     var mat = matUtil.readMat(imageFile);
