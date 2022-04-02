@@ -13,6 +13,7 @@ var CPConvolution2d = require('./lib/imageprocess/lib/cp_convolution2d');
 var CPFlip = require('./lib/imageprocess/lib/cp_flip');
 
 var CPRotate = require('./lib/imageprocess/lib/cp_rotate');
+var CPHarrisCorner = require('./lib/imageprocess/lib/cp_harris_corner');
 module.exports = {
     imageprocess: imageprocess,
     matUtil: matUtil,
@@ -27,5 +28,6 @@ module.exports = {
     CPCorrelation2d: CPCorrelation2d,
     CPConvolution2d: CPConvolution2d,
     CPFlip: CPFlip,
-    CPRotate: CPRotate
+    CPRotate: CPRotate,
+    CPHarrisCorner: CPHarrisCorner
 };
