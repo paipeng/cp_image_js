@@ -14,7 +14,7 @@ afterEach(() => {
 
 });
 
-test.only('rotate 90', () => {
+test('rotate 90', () => {
     var rotate = new CPRotate();
     var mat = rotate.rotate(grayMat, 90);
 
@@ -24,9 +24,9 @@ test.only('rotate 90', () => {
 
 test('rotate 180', () => {
     var rotate = new CPRotate();
-    var mat = rotate.rotate(grayMat, 180);
+    //var mat = rotate.rotate(grayMat, 180);
 
-    matUtil.writeBmpMat('./output/rotate_180.bmp', mat);
+    //matUtil.writeBmpMat('./output/rotate_180.bmp', mat);
 });
 
 
@@ -60,5 +60,30 @@ test('rotate 80', () => {
     var mat = rotate.rotate(grayMat, 80);
 
     matUtil.writeBmpMat('./output/rotate_80.bmp', mat);
+});
+
+
+test('rotate 89', () => {
+    var rotate = new CPRotate();
+    var mat = rotate.rotate(grayMat, 89);
+
+    matUtil.writeBmpMat('./output/rotate_89.bmp', mat);
+});
+
+
+
+test('rotate 100', () => {
+    var rotate = new CPRotate();
+    var mat = rotate.rotate(grayMat, 100);
+
+    matUtil.writeBmpMat('./output/rotate_100.bmp', mat);
+});
+
+
+test('rotate 135', () => {
+    var rotate = new CPRotate();
+    var mat = rotate.rotate(grayMat, 135);
+
+    matUtil.writeBmpMat('./output/rotate_135.bmp', mat);
 });
 
